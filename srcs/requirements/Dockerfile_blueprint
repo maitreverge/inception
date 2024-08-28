@@ -1,14 +1,29 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Dockerfile                                         :+:      :+:    :+:    #
+#    Dockerfile_blueprint                               :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: flverge <flverge@student.42perpignan.fr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/28 10:28:08 by flverge           #+#    #+#              #
-#    Updated: 2024/08/28 10:32:28 by flverge          ###   ########.fr        #
+#    Updated: 2024/08/28 10:58:32 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # The first line of a Dockerfile will always be FROM, which is the fundation image
-FROM alpine:3.19.3
+FROM alpine:3.19.3 
+
+# Optionnal but ENV command actually sets up the environment variables inside the container
+ENV MONGO_DB_USERNAME=admin \
+	MONGO_DB_PWD=password
+
+# RUN command executes any linux command IN THE CONTAINER, which is usefull to install packages
+RUN touch banana.txt \
+	mkdir banana_folder
+
+# COPY command actually executes IN THE HOST, and copies from the host towards the container.
+COPY <from_the_host> <to_the_container>
+
+# CMD command is a command that gets executed when we start the container.
+CMD ["echo", "Hello, World!"]
+
