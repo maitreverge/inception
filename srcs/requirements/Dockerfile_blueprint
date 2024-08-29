@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42perpignan.fr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/28 10:28:08 by flverge           #+#    #+#              #
-#    Updated: 2024/08/28 10:58:32 by flverge          ###   ########.fr        #
+#    Updated: 2024/08/29 19:43:34 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,13 +17,47 @@ FROM alpine:3.19.3
 ENV MONGO_DB_USERNAME=admin \
 	MONGO_DB_PWD=password
 
-# RUN command executes any linux command IN THE CONTAINER, which is usefull to install packages
-RUN touch banana.txt \
-	mkdir banana_folder
+# RUN command executes any linux command IN THE CONTAINER during BUILDING, which is usefull to install packages
+RUN apk update &&
+	apk upgrade &&
+	apk add curl \
+			sudo \
+			vim \
+			
 
 # COPY command actually executes IN THE HOST, and copies from the host towards the container.
 COPY <from_the_host> <to_the_container>
 
-# CMD command is a command that gets executed when we start the container.
+# EXPOSE command will expose ONLY the container port inside the Docker Network
+# and will not expose the CONTAINER's port to the HOST.
+EXPOSE 443
+
+# CMD command is a command that gets executed when we START the container.
 CMD ["echo", "Hello, World!"]
+
+# ENTRYPOINT command is more rigid and is less easily overwritable, but serves the same purpose than CMD
+ENTRYPOINT ["echo", "Hello, World!"]
+
+# An combinaison of BOTH ENTRYPOINT and CMD will turns out CMD be the default arguments to ENTRYPOINT
+ENTRYPOINT ["echo"]
+CMD ["Hello, World!"]
+
+# `docker run myimage` will print "Hello, World"
+# `docker run myimage JEJEJE` will print "JEJEJE"
+
+# LABEL adds metadata when we run `docker inspect <image> `
+LABEL description="Une image pour tester"
+LABEL version="1.0.0"
+
+# COPY and ADD achieve the same goal to copy files FROM the host TO the container.
+# ADD actually handles URL + decompress archives straight into the container
+# It is best practice to use ADD only when additional features are needed.
+COPY ./test /home
+ADD ./archive.tar /home
+ADD https://example.com/file1.txt /home
+
+# WORKDIR is like making a cd in the container, then all following commands will be executed from WORKDIR
+WORKDIR ~/test/
+
+
 
