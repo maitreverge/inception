@@ -1,0 +1,3 @@
+# Docker compose is a tool to manage multi-containers app, run and stop them with one command
+
+version:3
