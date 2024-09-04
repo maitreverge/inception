@@ -1,3 +1,14 @@
 # Docker compose is a tool to manage multi-containers app, run and stop them with one command
 
-version:3
+# global env file do not works
+# env_file:
+#   -path: ./.env
+
+services:
+  nginx:
+    image: nginx/
+    ports:
+      - "8080:80"
+    env_file:
+      - ./.env
+    restart: always
