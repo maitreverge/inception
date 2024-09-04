@@ -6,7 +6,7 @@
 
 services:
   nginx:
-    image: nginx/
+    build: nginx/
     ports:
       - "8080:80"
     env_file:
