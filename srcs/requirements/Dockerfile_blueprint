@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42perpignan.fr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/28 10:28:08 by flverge           #+#    #+#              #
-#    Updated: 2024/08/29 19:43:34 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/04 07:08:48 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,13 +18,11 @@ ENV MONGO_DB_USERNAME=admin \
 	MONGO_DB_PWD=password
 
 # RUN command executes any linux command IN THE CONTAINER during BUILDING, which is usefull to install packages
-RUN apk update &&
-	apk upgrade &&
+RUN apk update && \
+	apk upgrade && \
 	apk add curl \
 			sudo \
 			vim \
-			
-
 # COPY command actually executes IN THE HOST, and copies from the host towards the container.
 COPY <from_the_host> <to_the_container>
 
