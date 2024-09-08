@@ -6,9 +6,11 @@
 #    By: flverge <flverge@student.42perpignan.fr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/04 08:36:51 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/08 10:02:24 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+ARG ALPINE_VERSION
 
 FROM alpine:${ALPINE_VERSION}
 

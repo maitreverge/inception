@@ -6,7 +6,11 @@
 
 services:
   nginx:
-    build: nginx/
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+      args: # Use all the .env variables
+        - ALPINE_VERSION
     ports:
       - "8080:80"
     env_file:
