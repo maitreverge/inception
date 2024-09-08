@@ -3,15 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Dockerfile                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: flverge <flverge@student.42perpignan.fr    +#+  +:+       +#+         #
+#    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/08 10:16:51 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/08 10:31:27 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# Arguments used in an image reference should be valid when no build arguments are used.
 ARG ALPINE_VERSION
-FROM alpine:${ALPINE_VERSION}
+FROM alpine:${ALPINE_VERSION:-3.19.3}
 
 # Basics container packages
 RUN apk update && \
