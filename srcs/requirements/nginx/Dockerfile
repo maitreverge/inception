@@ -6,12 +6,11 @@
 #    By: flverge <flverge@student.42perpignan.fr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/08 10:02:24 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/08 10:16:51 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ARG ALPINE_VERSION
-
 FROM alpine:${ALPINE_VERSION}
 
 # Basics container packages
@@ -34,7 +33,8 @@ RUN apk add git && \
     /basic_zsh.sh && \
     rm /basic_zsh.sh
 
-RUN mkdir -p ${PATH_NGINX_CERTIFICATE}
+ARG PATH_NGINX_CERTIFICATE
+RUN mkdir ${PATH_NGINX_CERTIFICATE}
 
 RUN apk cache clean
 
