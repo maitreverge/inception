@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/08 10:31:27 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/12 16:35:08 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,4 +39,5 @@ RUN mkdir ${PATH_NGINX_CERTIFICATE}
 
 RUN apk cache clean
 
-CMD ["zsh"]
+# commande magique qui tiens le container UP, mais commande interdite
+CMD ["tail", "-f", "/dev/null"]
