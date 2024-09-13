@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/13 11:47:45 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/13 17:48:37 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,6 +78,10 @@ RUN adduser -S -G www-data www-data
 
 # Give authorization on the main user
 RUN chown -R www-data:www-data /var/www/html
+
+# Give nginx perm to access keys
+# RUN chown -R root:root /etc/nginx/ssl
+# RUN chmod -R 600 /etc/nginx/ssl
 
 # Clean useless packages for optimizing container size
 RUN apk cache clean
