@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/12 18:36:06 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/13 08:10:01 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,9 +54,7 @@ RUN openssl req -x509 -nodes -out \
 # Building nginx configuration path
 RUN mkdir -p /var/run/nginx
 
-
-
 RUN apk cache clean
 
 # commande magique qui tiens le container UP, mais commande interdite
-CMD ["tail", "-f", "/dev/null"]
+CMD ["nginx", "-g", "daemon off;"]
