@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/13 08:10:01 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/13 09:15:33 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ RUN apk update && \
 # OH-MY-ZSH REQUIREMENTS
 COPY conf/zsh/basic_zsh.sh /basic_zsh.sh
 
+# Installing oh-my-zsh + init .zshrc file.
 RUN apk add git && \
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
     find ~/.oh-my-zsh/themes -type f ! -name 'robbyrussell.zsh-theme' -exec rm -rf {} + && \
@@ -51,10 +52,25 @@ RUN openssl req -x509 -nodes -out \
 	-keyout ${PATH_NGINX_TSL_KEY}/inception.key \
 	-subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=${URL}/UID=${LOGIN}"
 
+    # ! need to check the above line for URL and LOGIN variables
+
+# Copy custom nginx config file
+COPY conf/nnginx/nginx.conf /etc/nginx/
+
+# ? IS USELESS
 # Building nginx configuration path
 RUN mkdir -p /var/run/nginx
 
+# Clean useless packages for optimizing container size
 RUN apk cache clean
 
-# commande magique qui tiens le container UP, mais commande interdite
+# Give authorization on the root
+RUN chmod 755 /var/www/html
+
+# Give authorization on the main user
+RUN chown -R www-data:www-data /var/www/html
+
+# Runs the nginx process as a non daemon process,
+# to avoid PID 1 to rip it off, become a zombie process and then shut-down the container.
 CMD ["nginx", "-g", "daemon off;"]
+# CMD ["tail", "-f", ">dev/null;"] Forbidden command
