@@ -1,3 +1,3 @@
 # /bin/sh
 
-./../killinception.sh
+./../kill_inception.sh
