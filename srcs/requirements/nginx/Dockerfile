@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/13 09:15:33 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/13 11:47:45 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,20 +55,32 @@ RUN openssl req -x509 -nodes -out \
     # ! need to check the above line for URL and LOGIN variables
 
 # Copy custom nginx config file
-COPY conf/nnginx/nginx.conf /etc/nginx/
+COPY conf/nginx/nginx.conf /etc/nginx/
+
+# Create the html directory for stocking the base html file
+RUN mkdir -p /var/www/html
+
+# Create a base html file
+# RUN echo "<h1>Hello, NGINX on Alpine!</h1>" > /var/www/html/index.html
+COPY conf/nginx/index.html /var/www/html/
 
 # ? IS USELESS
 # Building nginx configuration path
 RUN mkdir -p /var/run/nginx
 
-# Clean useless packages for optimizing container size
-RUN apk cache clean
 
 # Give authorization on the root
 RUN chmod 755 /var/www/html
 
+
+# Create the data user and adds it to the www-data group
+RUN adduser -S -G www-data www-data
+
 # Give authorization on the main user
 RUN chown -R www-data:www-data /var/www/html
+
+# Clean useless packages for optimizing container size
+RUN apk cache clean
 
 # Runs the nginx process as a non daemon process,
 # to avoid PID 1 to rip it off, become a zombie process and then shut-down the container.
