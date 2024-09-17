@@ -3,15 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Dockerfile_blueprint                               :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: flverge <flverge@student.42perpignan.fr    +#+  +:+       +#+         #
+#    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/28 10:28:08 by flverge           #+#    #+#              #
-#    Updated: 2024/09/04 07:08:48 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/17 11:32:35 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # The first line of a Dockerfile will always be FROM, which is the fundation image
 FROM alpine:3.19.3 
+
+# ARG is for built-time variable
+# Contrary to `ENV`, ARG is only used during build time
+ARG PATH_NGINX_CERTIFICATE
 
 # Optionnal but ENV command actually sets up the environment variables inside the container
 ENV MONGO_DB_USERNAME=admin \

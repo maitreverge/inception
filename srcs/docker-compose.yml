@@ -1,22 +1,18 @@
 # Docker compose is a tool to manage multi-containers app, run and stop them with one command
 
-# global env file do not works
-# env_file:
-#   -path: ./.env
-
 services:
   nginx:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
-      args: # Use all the .env variables
-        ALPINE_VERSION : ${ALPINE_VERSION}
-        PATH_NGINX_CERTIFICATE : ${PATH_NGINX_CERTIFICATE}
-        PATH_NGINX_TSL_KEY : ${PATH_NGINX_TSL_KEY}
-        URL : ${URL}
-        LOGIN : ${LOGIN}
+      # Build time arguments
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
+        PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
+        PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
     ports:
-      - "443:443" 
+      - "443:443"
+    # Run time env variables plugged as variables envs
     env_file:
       - ./.env
     restart: always

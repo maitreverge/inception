@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/09/13 22:02:59 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/17 09:30:04 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,5 @@ down:
 re: clean up
 
 clean: down
-	@echo "Running kill_inception.sh script..."
 	@docker system prune --all --force --volumes
 	@echo "kill_inception.sh OVER"

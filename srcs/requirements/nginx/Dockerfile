@@ -6,12 +6,9 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/13 17:48:37 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/17 17:26:31 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-ARG LOGIN
-ARG URL
 
 # Arguments used in an image reference should be valid when no build arguments are used.
 ARG ALPINE_VERSION
@@ -47,6 +44,8 @@ ARG PATH_NGINX_TSL_KEY
 RUN mkdir -p ${PATH_NGINX_TSL_KEY}
 
 # Creating the self-signed certificate
+ARG PATH_NGINX_CERTIFICATE
+ARG PATH_NGINX_TSL_KEY
 RUN openssl req -x509 -nodes -out \
 	${PATH_NGINX_CERTIFICATE}/inception.crt \
 	-keyout ${PATH_NGINX_TSL_KEY}/inception.key \
@@ -55,7 +54,12 @@ RUN openssl req -x509 -nodes -out \
     # ! need to check the above line for URL and LOGIN variables
 
 # Copy custom nginx config file
-COPY conf/nginx/nginx.conf /etc/nginx/
+COPY conf/nginx/pre_nginx.conf /etc/nginx/
+
+COPY conf/nginx/swap_env_nginx.sh /etc/nginx/
+
+RUN chmod +x /etc/nginx/swap_env_nginx.sh
+RUN /bin/sh /etc/nginx/swap_env_nginx.sh
 
 # Create the html directory for stocking the base html file
 RUN mkdir -p /var/www/html
@@ -68,20 +72,14 @@ COPY conf/nginx/index.html /var/www/html/
 # Building nginx configuration path
 RUN mkdir -p /var/run/nginx
 
-
 # Give authorization on the root
 RUN chmod 755 /var/www/html
-
 
 # Create the data user and adds it to the www-data group
 RUN adduser -S -G www-data www-data
 
 # Give authorization on the main user
 RUN chown -R www-data:www-data /var/www/html
-
-# Give nginx perm to access keys
-# RUN chown -R root:root /etc/nginx/ssl
-# RUN chmod -R 600 /etc/nginx/ssl
 
 # Clean useless packages for optimizing container size
 RUN apk cache clean
