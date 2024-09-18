@@ -16,3 +16,15 @@ services:
     env_file:
       - ./.env
     restart: always
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+      # Build time arguments
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
+    # Run time env variables plugged as variables envs
+    env_file:
+      - ./.env
+    restart: always
