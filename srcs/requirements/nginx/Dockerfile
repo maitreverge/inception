@@ -6,17 +6,18 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/18 10:05:23 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/19 08:30:14 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Arguments used in an image reference should be valid when no build arguments are used.
-ARG ALPINE_VERSION
-FROM alpine:${ALPINE_VERSION:-3.19.3}
+ARG DEBIAN_VERSION
+FROM debian:${DEBIAN_VERSION:-bullseye}
 
 # Basics container packages
-RUN apk update && \
-    apk add --no-cache \
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get -y install \
         zsh \
         nginx \
         openssl
