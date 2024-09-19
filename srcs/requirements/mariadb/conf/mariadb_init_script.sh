@@ -3,7 +3,8 @@
 # If a command fails, script will stop immediately
 set -e
 
-# if [ ! -d "/path/to/directory" ] checks if a directory exists
+# if [ ! -d "/path/to/directory" ] checks if a directory exists,
+# if not, execute the code
 
 # Checks if the path /run/mysqld exists
 # be responsible for storing temporary files and important files
@@ -12,4 +13,6 @@ if [ ! -d "/run/mysqld" ]; then
     echo "/run/mysqld does not exists, creating..."
     mkdir -p "/run/mysqld"
     echo "/run/mysqld CREATED"
+    chown root:root /run/mysqld
 fi
+
