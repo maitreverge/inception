@@ -10,14 +10,21 @@
 
 #
 # * Basic Settings
-#
-user                    = mysql
+
+# ! As asked in the subject, mariadb connect to the port 3306
+port                    = 3306
+
+# Base user need to be root user
+user                    = root
+# =========== OTHER DEFAULT SETTINGS ===========
 pid-file                = /run/mysqld/mysqld.pid
 basedir                 = /usr
 datadir                 = /var/lib/mysql
 tmpdir                  = /tmp
 lc-messages-dir         = /usr/share/mysql
 lc-messages             = en_US
+# =========== OTHER DEFAULT SETTINGS ===========
+
 skip-external-locking
 
 # Broken reverse DNS slows down connections considerably and name resolve is
@@ -26,7 +33,9 @@ skip-external-locking
 
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-bind-address            = 127.0.0.1
+
+# ! In this line, we precise that all local IP can connect to it
+bind-address            =*
 
 #
 # * Fine Tuning

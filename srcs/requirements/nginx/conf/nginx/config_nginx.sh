@@ -1,5 +1,8 @@
 #! /bin/sh
 
+# If a command fails, script will stop immediately
+set -e
+
 # Create the html directory for stocking the base html file
 mkdir -p /var/www/html
 
