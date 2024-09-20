@@ -1,2 +1,2 @@
-Make a script for downloading the .env with curl command + password for simplifying the .env init with a private repo or smth ?
+check nc -v localhost 443  => prouver que un port est ouvert ou port
 

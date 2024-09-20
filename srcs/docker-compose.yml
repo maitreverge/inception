@@ -6,7 +6,7 @@ services:
     image: nginx
     build:
       context: ./requirements/nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile # If dockerfile is not named Dockerfile
       # Build time arguments
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
@@ -31,4 +31,4 @@ services:
     # Run time env variables plugged as variables envs
     env_file:
       - ./.env
-    restart: always
+    restart: on-failure # ! regarder les differentes options

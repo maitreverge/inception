@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/19 09:53:38 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/19 17:39:45 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,9 @@ RUN chmod +x etc/nginx/config_nginx.sh && \
 # Create a base html file
 # RUN echo "<h1>Hello, NGINX on Alpine!</h1>" > /var/www/html/index.html
 COPY conf/nginx/index.html /var/www/html/
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!! A REGARDER
+EXPOSE 443 
 
 # Runs the nginx process as a non daemon process,
 # to avoid PID 1 to rip it off, become a zombie process and then shut-down the container.

@@ -16,3 +16,14 @@ if [ ! -d "/run/mysqld" ]; then
     chown root:root /run/mysqld
 fi
 
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+    # echo "/run/mysqld does not exists, creating..."
+    # mkdir -p "/run/mysqld"
+    # echo "/run/mysqld CREATED"
+    # chown root:root /run/mysqld
+    mysql_install_db
+    echo "mariadb est pas installe securite o max"
+fi
+
+
+
