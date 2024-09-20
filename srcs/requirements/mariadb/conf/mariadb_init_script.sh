@@ -44,13 +44,13 @@ mariadb -e "CREATE USER IF NOT EXISTS \`${MARIADB_USER_LOGIN}\`@'localhost' IDEN
 mariadb -e "GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE_NAME}\`.* TO \`${MARIADB_USER_LOGIN}\`@'%' IDENTIFIED BY '${MARIADB_USER_PASSWORD}';"
 
 # Modify root user
-mariadb -e "ALTER USER '${MARIADB_ROOT_LOGIN}'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';"
+# mariadb -e "ALTER USER '${MARIADB_ROOT_LOGIN}'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';"
 
 # Refresh MariaDB to apply the aboves changes
 mariadb -e "FLUSH PRIVILEGES;"
 
 # Restart MariaDB
 # ! NOTE :   (no need to ${VARIABLE} because this is a regular shell command)
-mysqladmin -u root -p $MARIADB_ROOT_PASSWORD shutdown
+mysqladmin -u root -p$MARIADB_ROOT_PASSWORD shutdown
 
-# mariadb-safe
+mysqld_safe
