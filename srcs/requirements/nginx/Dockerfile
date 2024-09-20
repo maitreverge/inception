@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/19 17:39:45 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/20 09:24:39 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,5 +58,5 @@ EXPOSE 443
 
 # Runs the nginx process as a non daemon process,
 # to avoid PID 1 to rip it off, become a zombie process and then shut-down the container.
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
 # CMD ["tail", "-f", ">dev/null;"] Forbidden command
