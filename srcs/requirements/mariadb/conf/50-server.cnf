@@ -1,16 +1,33 @@
-[mysql]
-default-character-set=utf8
+[server]
 
 [mysqld]
-bind-address = 0.0.0.0
-user = mysql
-datadir = /var/lib/mysql
-socket = /var/run/mysqld/mysqld.sock
 
-[client]
-port = 3306
-socket = /var/run/mysqld/mysqld.sock
+# ! As asked in the subject, mariadb connect to the port 3306
+port                    = 3306
 
-[mysqld_safe]
-log_error = /var/log/mysql/mysql_error.log
-pid-file = /var/run/mysqld/mysqld.pid
+# Base user need to be root user
+user                    = root
+# =========== OTHER DEFAULT SETTINGS ===========
+pid-file                = /run/mysqld/mysqld.pid
+basedir                 = /usr
+datadir                 = /var/lib/mysql
+tmpdir                  = /tmp
+lc-messages-dir         = /usr/share/mysql
+lc-messages             = en_US
+# socket                  = run/mysqld/mysqld.sock
+# =========== OTHER DEFAULT SETTINGS ===========
+
+skip-external-locking
+
+bind-address            = 0.0.0.0
+
+expire_logs_days        = 10
+
+character-set-server  = utf8mb4
+collation-server      = utf8mb4_general_ci
+
+[embedded]
+
+[mariadb]
+
+[mariadb-10.5]
