@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/09/19 08:15:03 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/20 14:29:12 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,5 +24,11 @@ down:
 
 re: clean up
 
-clean: down
-	@docker system prune --all --force --volumes
+clean: down delete_volume
+	@docker system prune --all --force
+
+delete_volume:
+	@echo "Deleting volumes"
+	@rm -rf ~/flverge
+	@echo "Volumes deteted"
+	

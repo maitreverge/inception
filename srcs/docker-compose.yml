@@ -33,6 +33,21 @@ services:
       - "3306:3306"
     restart: on-failure # ! regarder les differentes options
 
+volumes:
+  mariadb_volume:
+    driver: local
+    drivers_opts:
+      type: none
+      device: /home/flverge/data/mysql
+      o: bind
+  wordpress_volume:
+    driver: local
+    drivers_opts:
+      type: none
+      device: /home/flverge/data/wordpress
+      o: bind
+
+
 networks:
   inception:
   driver: bridge
