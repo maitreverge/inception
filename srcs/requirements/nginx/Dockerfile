@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/20 11:17:03 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/20 11:29:23 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,13 @@ RUN apt-get -y update && \
     apt-get -y install \
         nginx \
         openssl
+
+# FOR NGINX MANAGING ENV VARIABLES IN NGINX CONF FILE
+
+# !! The gettext-base package provides basic internationalization and localization functions,
+# like envsubst, which substitutes environment variables in strings.
+# This package is less directly related to starting services but
+# is often used in Docker images or scripts to help localize output or manage environment variables.
 
 # Copy the conf file
 COPY conf/nginx/nginx.conf /etc/nginx/

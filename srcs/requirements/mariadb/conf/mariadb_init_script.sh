@@ -55,3 +55,5 @@ mysql -e "FLUSH PRIVILEGES;"
 # Restart MariaDB
 # ! NOTE :   (no need to ${VARIABLE} because this is a regular shell command)
 mysqladmin -u root -p $MARIADB_ROOT_PASSWORD shutdown
+
+mysqld_safe
