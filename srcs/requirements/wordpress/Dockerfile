@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/20 18:09:03 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/20 18:35:26 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,15 @@ RUN cd /var/www && tar -xzf wordpress-6.6.2-fr_FR.tar.gz && rm wordpress-6.6.2-f
 # Give rightsd access
 RUN		chown -R root:root /var/www/wordpress
 
+COPY conf/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+
+# install wordpress CLI
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+
+# Deplacer wordpress dans le bon binaire
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
 
 ENTRYPOINT ["sh", "-c", "tail -f /dev/null"]
