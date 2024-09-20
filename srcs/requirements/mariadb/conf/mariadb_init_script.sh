@@ -3,8 +3,11 @@
 # If a command fails, script will stop immediately
 set -e
 
-# if [ ! -d "/path/to/directory" ] checks if a directory exists,
-# if not, execute the code
+#
+# ! NOTE
+#
+
+# if [ ! -d "/path/to/directory" ] checks if a directory does not exists
 
 # Checks if the path /run/mysqld exists
 # be responsible for storing temporary files and important files
@@ -24,11 +27,31 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "MariaDB is Created, time to DROP DATABSE; boys"
 fi
 
+# `mysql -e` (-e stands for --execute) runs SQL queries without entering the DATABASE in interactive mode.
+
+#
+# ! NOTE
+#
+# While running a SQL query in detached mode with `mysql -e`, env variables need curly braces such as ${VARIABLE}
+
+# Running the MariaDB service
+service mysql start;
+
 # Create the database if such does not exists
 mysql -e "CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE_NAME}\`;"
 
 # Init the main user with his password
-mysql -e "CREATE USER IF NOT EXISTS \`${MARIADB_MAIN_USER}\`@'localhost' IDENTIFIED BY '${MARIADB_MAIN_PASSWORD}';"
+mysql -e "CREATE USER IF NOT EXISTS \`${MARIADB_USER_LOGIN}\`@'localhost' IDENTIFIED BY '${MARIADB_USER_PASSWORD}';"
 
 # Grant full access to the database to the created user.
-mysql -e "GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE_NAME}\`.* TO \`${MARIADB_MAIN_USER}\`@'%' IDENTIFIED BY '${MARIADB_MAIN_PASSWORD}';"
+mysql -e "GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE_NAME}\`.* TO \`${MARIADB_USER_LOGIN}\`@'%' IDENTIFIED BY '${MARIADB_USER_PASSWORD}';"
+
+# Modify root user
+mysql -e "ALTER USER '${MARIADB_ROOT_LOGIN}'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';"
+
+# Refresh MariaDB to apply the aboves changes
+mysql -e "FLUSH PRIVILEGES;"
+
+# Restart MariaDB
+# ! NOTE :   (no need to ${VARIABLE} because this is a regular shell command)
+mysqladmin -u root -p $MARIADB_ROOT_PASSWORD shutdown
