@@ -1,7 +1,8 @@
 # Docker compose is a tool to manage multi-containers app, run and stop them with one command
-
 services:
   nginx:
+    depends_on:
+      - wordpress
     container_name: nginx
     image: nginx
     build:
@@ -15,6 +16,8 @@ services:
     # Run time env variables plugged as variables envs
     env_file:
       - ./.env
+    volumes:
+      - wordpress_volume:/var/www/wordpress
     restart: always
 
   mariadb:
@@ -31,23 +34,45 @@ services:
       - ./.env
     ports:
       - "3306:3306"
+    volumes:
+      - mariadb_volume:/var/lib/mysql
     restart: on-failure # ! regarder les differentes options
+
+  wordpress:
+    depends_on:
+      - mariadb
+    container_name: wordpress
+    image: wordpress
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+      # Build time arguments
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    # Run time env variables plugged as variables envs
+    env_file:
+      - ./.env
+    ports:
+      - "9000:9000"
+    volumes:
+      - wordpress_volume:/var/www/wordpress
+    restart: on-failure
 
 volumes:
   mariadb_volume:
     driver: local
-    drivers_opts:
+    driver_opts:
       type: none
       device: /home/flverge/data/mysql
       o: bind
   wordpress_volume:
     driver: local
-    drivers_opts:
+    driver_opts:
       type: none
       device: /home/flverge/data/wordpress
       o: bind
 
-
 networks:
   inception:
-  driver: bridge
+    driver: bridge
+    external: false
