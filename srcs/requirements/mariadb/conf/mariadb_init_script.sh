@@ -34,8 +34,8 @@ fi
 #
 # While running a SQL query in detached mode with `mysql -e`, env variables need curly braces such as ${VARIABLE}
 
-# Running the MariaDB service
-service mysql start;
+# Running the MariaDB service in background
+mysqld_safe &
 
 # Create the database if such does not exists
 mysql -e "CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE_NAME}\`;"
