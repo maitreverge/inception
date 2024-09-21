@@ -17,7 +17,7 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
                         --dbuser=${MARIADB_USER_LOGIN} \
                         --dbpass=${MARIADB_USER_PASSWORD} \
                         --dbhost=mariadb:3306 \
-                        --path='/var/www/wordpress' \
+                        --path='/var/www/wordpress'
     
     # Create the admin login details
     wp core install     --allow-root \
@@ -34,8 +34,10 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
                         --${WP_USER_LOGIN} \
                         --${WP_USER_EMAIL} \
                         --user_pass=${WP_USER_PASSWORD} \
-                        --${}
-                        --${}
+                        --role='editor' \
+                        --display_name=${WP_USER_LOGIN} \
+                        --porcelain \
+                        --path='/var/www/html'
 else
     echo "Wordpress config file does already exists, skipping configuration..."
 fi

@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/21 11:41:14 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/21 13:20:55 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,5 +69,7 @@ COPY scripts/wp-config.sh ${SCRIPTS_FOLDER}
 
 RUN chmod +x ${SCRIPTS_FOLDER}/wp-config.sh
 
-
-ENTRYPOINT ["sh", "-c", "tail -f /dev/null"]
+# Execute script
+ENTRYPOINT ["sh", "${SCRIPTS_FOLDER}/wp-config.sh"]
+# Force to stay in foreground and ignore daemonize option from configuration file.
+CMD ["/usr/sbin/php-fmp7.4", "-F"] 
