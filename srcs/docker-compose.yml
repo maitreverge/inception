@@ -49,6 +49,7 @@ services:
       # Build time arguments
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+        SCRIPTS_FOLDER: ${SCRIPTS_FOLDER}
     # Run time env variables plugged as variables envs
     env_file:
       - ./.env

@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/21 11:10:18 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/21 11:41:14 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,10 @@ RUN apt-get -y update && \
         php-intl \
         mariadb-client
 
+# Create main scripts folder
+ARG SCRIPTS_FOLDER
+RUN mkdir -p ${SCRIPTS_FOLDER}
+        
 # Target folder creation for Wordpress
 RUN mkdir -p /var/www
 
@@ -50,15 +54,20 @@ RUN cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak && \
 # Copy PHP config file
 COPY conf/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
 
-# Copy Wordpress config file
+# Copy Wordpress config file # ? REALLY USEFULL ?????
 # COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
-# install wordpress CLI
-# RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+# Install Wordpress CLI for automatic config
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
-# Deplacer wordpress dans le bon binaire
-# RUN chmod +x wp-cli.phar
-# RUN mv wp-cli.phar /usr/local/bin/wp
+# Give authorization to the binari WP-CLI, and move it to binary folder (eases the call of the binary with )
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+ARG SCRIPTS_FOLDER
+COPY scripts/wp-config.sh ${SCRIPTS_FOLDER}
+
+RUN chmod +x ${SCRIPTS_FOLDER}/wp-config.sh
 
 
 ENTRYPOINT ["sh", "-c", "tail -f /dev/null"]
