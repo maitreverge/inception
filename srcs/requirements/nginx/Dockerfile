@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/20 11:29:23 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/21 14:23:43 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,20 +15,13 @@ ARG DEBIAN_VERSION
 FROM debian:${DEBIAN_VERSION:-bullseye}
 
 # Basics container packages
-RUN apt-get -y update && \
-    apt-get -y install \
+RUN apt-get update -y && \
+    apt-get install -y \
         nginx \
         openssl
 
-# FOR NGINX MANAGING ENV VARIABLES IN NGINX CONF FILE
-
-# !! The gettext-base package provides basic internationalization and localization functions,
-# like envsubst, which substitutes environment variables in strings.
-# This package is less directly related to starting services but
-# is often used in Docker images or scripts to help localize output or manage environment variables.
-
 # Copy the conf file
-COPY conf/nginx/nginx.conf /etc/nginx/
+COPY conf/nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Base Script
 COPY conf/nginx/config_nginx.sh /etc/nginx
@@ -38,7 +31,7 @@ RUN chmod +x etc/nginx/config_nginx.sh
 
 # Create a base html file
 # RUN echo "<h1>Hello, NGINX on Alpine!</h1>" > /var/www/html/index.html
-COPY conf/nginx/index.html /var
+# COPY conf/nginx/index.html /var
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!! A REGARDER
 EXPOSE 443
