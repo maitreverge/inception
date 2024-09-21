@@ -32,8 +32,8 @@ services:
     # Run time env variables plugged as variables envs
     env_file:
       - ./.env
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
     volumes:
       - mariadb_volume:/var/lib/mysql
     restart: on-failure # ! regarder les differentes options
@@ -53,8 +53,8 @@ services:
     # Run time env variables plugged as variables envs
     env_file:
       - ./.env
-    ports:
-      - "9000:9000"
+    expose:
+      - "9000"
     volumes:
       - wordpress_volume:/var/www/wordpress
     restart: on-failure
@@ -64,16 +64,15 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/flverge/data/mysql
+      device: /home/${USER}/data/mysql
       o: bind
   wordpress_volume:
     driver: local
     driver_opts:
       type: none
-      device: /home/flverge/data/wordpress
+      device: /home/${USER}/data/wordpress
       o: bind
 
 networks:
   inception:
-    driver: bridge
-    external: false
+    name: inception
