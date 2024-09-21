@@ -30,6 +30,12 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
                         --path='/var/www/html'
 
     # Create another user which is not root for Wordpress
+    wp user create      --allow-root \
+                        --${WP_USER_LOGIN} \
+                        --${WP_USER_EMAIL} \
+                        --user_pass=${WP_USER_PASSWORD} \
+                        --${}
+                        --${}
 else
     echo "Wordpress config file does already exists, skipping configuration..."
 fi
