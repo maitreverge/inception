@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/09/20 17:27:55 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/21 14:32:14 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,13 +29,13 @@ clean: down delete_volume
 
 create_volume:
 	@echo "Creating MariaDB volume"
-	@mkdir -p /home/flverge/data/mysql
+	@mkdir -p /home/${USER}/data/mysql
 	@echo "Creating wordpress volume"
-	@mkdir -p /home/flverge/data/wordpress
+	@mkdir -p /home/${USER}/data/wordpress
 
 delete_volume:
 	@echo "Deleting volumes"
-	@sudo rm -rf /home/flverge/data/mysql
-	@sudo rm -rf /home/flverge/data/wordpress
+	@sudo rm -rf /home/${USER}/data/mysql
+	@sudo rm -rf /home/${USER}/data/wordpress
 	@echo "Volumes deteted"
 	
