@@ -13,16 +13,18 @@ sleep 10
 # If the wp-config.php file does not exists, configure Wordpress
 if [ ! -f /var/www/wordpress/wp-config.php ]; then
 
-    echo "======================="
-    echo "Configuring the database"
-    echo "======================="
+    cd /war/www/wordpress
+
+    echo "==================================================="
+    echo "              Configuring the database"
+    echo "==================================================="
     # Create the database for wordpress
     wp config create    --allow-root \
                         --dbname=${MARIADB_DATABASE_NAME} \
                         --dbuser=${MARIADB_USER_LOGIN} \
                         --dbpass=${MARIADB_USER_PASSWORD} \
                         --dbhost=mariadb:3306 \
-                        --path='/var/www'
+                        --path='/var/www/wordpress'
     
     # Create the admin login details
     wp core install     --allow-root \
@@ -32,7 +34,7 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
                         --admin_password=${WP_ADMIN_PASSWORD} \
                         --admin_email${WP_ADMIN_EMAIL} \
                         --skip-email \
-                        --path='/var/www'
+                        --path='/var/www/wordpress'
 
     # Create another user which is not root for Wordpress
     wp user create      --allow-root \
@@ -42,7 +44,7 @@ if [ ! -f /var/www/wordpress/wp-config.php ]; then
                         --role='editor' \
                         --display_name=${WP_USER_LOGIN} \
                         --porcelain \
-                        --path='/var/www'
+                        --path='/var/www/wordpress'
 else
     echo "Wordpress config file does already exists, skipping configuration..."
 fi

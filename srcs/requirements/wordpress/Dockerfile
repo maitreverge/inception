@@ -4,9 +4,9 @@
 #    Dockerfile                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
+#                                                 +#+#+#+#+#+   +#+            #d
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/23 13:31:37 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/23 14:35:09 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,9 @@ FROM debian:${DEBIAN_VERSION:-bullseye}
 RUN apt-get -y update && \
     apt-get install -y \
         zsh \
+        curl \
         wget \
-        php7.4 \
+        php8.1 \
         php-fpm \
         php-mysql \
         php-intl \
@@ -28,31 +29,35 @@ RUN apt-get -y update && \
 # Target folder creation for Wordpress
 RUN mkdir -p /var/www/html
 
-# Get Wordpress
-RUN wget https://fr.wordpress.org/wordpress-6.6.2-fr_FR.tar.gz -P /var/www
+WORKDIR /var/www
 
-# Unzip the archive and delete it
-RUN tar -xzf /var/www/wordpress-6.6.2-fr_FR.tar.gz && \
-    rm -fr /var/www/wordpress-6.6.2-fr_FR.tar.gz
+# Copy PHP config file
+COPY conf/php-fpm.conf /etc/php/8.1/fpm/
+
+# Copy Wordpress config
+COPY conf/www.conf /etc/php/8.1/fpm/pool.d/
+
+# Get Wordpress, unzip it and delete the archive
+RUN curl -o latest.tar.gz https://wordpress.org/latest.tar.gz && \
+    tar -xzvf latest.tar.gz && \
+    rm -rf latest.tar.gz
 
 # Give to root WRITE rights to the wordpress folder
-RUN		chown -R www-data:www-data /var/www
+RUN		chown -R www-data:www-data /var/www/wordpress
 
 # Change authorizations
-RUN		chmod -R 755 var/www
+RUN		chmod -R 755 /var/www/wordpress
 
 # !         SECURITY COMMANDS :
 # Saving the current PHP and Wordpress config files
 # before copying my config files
-# RUN cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak && \
-#     cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
+# RUN cp /etc/php/8.1/fpm/php-fpm.conf /etc/php/8.1/fpm/php-fpm.conf.bak && \
+#     cp /etc/php/8.1/fpm/pool.d/www.conf /etc/php/8.1/fpm/pool.d/www.conf.bak
 
 
-# Copy PHP config file
-COPY conf/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
 
 # Copy Wordpress config file # ? REALLY USEFULL ?????
-# COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+# COPY conf/www.conf /etc/php/8.1/fpm/pool.d/www.conf
 
 # Install Wordpress CLI for automatic config
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -69,6 +74,6 @@ EXPOSE 9000
 
 # Execute script
 # ARG SCRIPTS_FOLDER
-ENTRYPOINT [ "wp-config.sh" ]
+# ENTRYPOINT [ "wp-config.sh" ]
 # Force to stay in foreground and ignore daemonize option from configuration file.
 CMD ["php-fpm7.4", "-F"] 
