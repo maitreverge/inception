@@ -1,5 +1,9 @@
 #! /bin/sh
 
+echo "====================================="
+echo "ENTRY POINT EXECUTED"
+echo "====================================="
+
 # If a command fails, script will stop immediately
 set -e
 
@@ -27,4 +31,4 @@ openssl req -x509 \
 
 # Runs the nginx process as a non daemon process,
 # to avoid PID 1 to rip it off, become a zombie process and then shut-down the container.
-nginx -g 'daemon off;'
+exec nginx -g 'daemon off;'

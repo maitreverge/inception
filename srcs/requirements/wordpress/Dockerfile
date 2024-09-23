@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/21 15:14:02 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/23 13:31:37 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,30 +25,27 @@ RUN apt-get -y update && \
         php-intl \
         mariadb-client
 
-# Create main scripts folder
-ARG SCRIPTS_FOLDER
-RUN mkdir -p ${SCRIPTS_FOLDER}
-        
 # Target folder creation for Wordpress
-RUN mkdir -p /var/www
+RUN mkdir -p /var/www/html
 
 # Get Wordpress
 RUN wget https://fr.wordpress.org/wordpress-6.6.2-fr_FR.tar.gz -P /var/www
 
 # Unzip the archive and delete it
-RUN cd /var/www && \
-    tar -xzf wordpress-6.6.2-fr_FR.tar.gz && \
-    rm wordpress-6.6.2-fr_FR.tar.gz && \
-    cd ../../
+RUN tar -xzf /var/www/wordpress-6.6.2-fr_FR.tar.gz && \
+    rm -fr /var/www/wordpress-6.6.2-fr_FR.tar.gz
 
 # Give to root WRITE rights to the wordpress folder
-RUN		chown -R root:root /var/www/wordpress
+RUN		chown -R www-data:www-data /var/www
+
+# Change authorizations
+RUN		chmod -R 755 var/www
 
 # !         SECURITY COMMANDS :
 # Saving the current PHP and Wordpress config files
 # before copying my config files
-RUN cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak && \
-    cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
+# RUN cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak && \
+#     cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
 
 
 # Copy PHP config file
@@ -64,15 +61,14 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 
-ARG SCRIPTS_FOLDER
-COPY scripts/wp-config.sh ${SCRIPTS_FOLDER}
+COPY scripts/wp-config.sh /usr/local/bin/wp-config.sh
 
-RUN chmod +x ${SCRIPTS_FOLDER}/wp-config.sh
+RUN chmod +x /usr/local/bin/wp-config.sh
 
 EXPOSE 9000
 
 # Execute script
 # ARG SCRIPTS_FOLDER
-ENTRYPOINT ["sh", "/start_scripts/wp-config.sh"]
+ENTRYPOINT [ "wp-config.sh" ]
 # Force to stay in foreground and ignore daemonize option from configuration file.
-CMD ["/usr/sbin/php-fmp7.4", "-F"] 
+CMD ["php-fpm7.4", "-F"] 
