@@ -6,7 +6,7 @@
 port                    = 3306
 
 # Base user need to be root user
-user                    = root
+user                    = mysql
 # =========== OTHER DEFAULT SETTINGS ===========
 pid-file                = /run/mysqld/mysqld.pid
 basedir                 = /usr

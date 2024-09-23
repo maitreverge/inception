@@ -46,7 +46,7 @@ services:
     expose:
       - "3306"
     volumes:
-      - mariadb_volume:/var/lib/mysql
+      - mariadb_volume:/var/lib/mysql # data location (see config file)
     # Should run continuously but can be stopped manually
     restart: unless-stopped
     networks:
