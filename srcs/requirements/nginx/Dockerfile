@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/09/21 14:23:43 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/23 20:55:03 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,21 +19,31 @@ RUN apt-get update -y && \
     apt-get install -y \
         nginx \
         openssl
-
+        
 # Copy the conf file
-COPY conf/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 
-# Base Script
-COPY conf/nginx/config_nginx.sh /etc/nginx
+# Give authorization on the root
+RUN chmod 755 /var/www/html
 
-# Give permissions to the script
-RUN chmod +x etc/nginx/config_nginx.sh
+# Give authorization on the main user
+RUN chown -R www-data:www-data /var/www/html
+        
+# Build Path for certificate
+ARG PATH_NGINX_CERTIFICATE
+RUN mkdir -p ${PATH_NGINX_CERTIFICATE}
 
-# Create a base html file
-# RUN echo "<h1>Hello, NGINX on Alpine!</h1>" > /var/www/html/index.html
-# COPY conf/nginx/index.html /var
+# Build Path for TSL key
+ARG PATH_NGINX_TSL_KEY
+RUN mkdir -p ${PATH_NGINX_TSL_KEY}
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!! A REGARDER
+# Creating the self-signed certificate
+RUN openssl req -x509 \
+                -nodes \
+                -out ${PATH_NGINX_CERTIFICATE}/inception.crt \
+                -keyout ${PATH_NGINX_TSL_KEY}/inception.key \
+                -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=flverge.42.fr/UID=flverge"
+
 EXPOSE 443
 
-ENTRYPOINT ["etc/nginx/config_nginx.sh"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

@@ -16,6 +16,8 @@ services:
       # Build time arguments
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+        PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
+        PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
     # Map host ports to container ports
     ports:
       - "443:443"
@@ -94,5 +96,5 @@ volumes:
 # into the container. This is useful for sharing data between the host and the container.
 
 networks:
-  inception:
+  inception_network:
     name: inception_network
