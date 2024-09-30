@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/14 05:58:37 by flverge           #+#    #+#              #
-#    Updated: 2024/09/23 21:09:46 by flverge          ###   ########.fr        #
+#    Updated: 2024/09/30 12:19:15 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ COPY conf/mariadb_init_script.sh /etc
 
 RUN chmod +x etc/mariadb_init_script.sh
 
+# This expose command only serves as documentation
+# as the real exposing process happens to be in the docker-compose
 EXPOSE 3306
         
 ENTRYPOINT [ "etc/mariadb_init_script.sh" ]
