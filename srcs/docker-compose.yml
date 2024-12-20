@@ -6,9 +6,9 @@ services:
     image: nginx
     # depends-on does tell compose on which order to start the containers.
     # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
-    # depends_on:
-    #   - mariadb
-    #   - wordpress
+    depends_on:
+      # - mariadb
+      - wordpress
     build:
       # Target the Dockerfile location
       context: ./requirements/nginx
@@ -54,25 +54,25 @@ services:
   #   networks:
   #     - inception_network
 
-  # wordpress:
-  #   container_name: wordpress
-  #   image: wordpress
-  #   depends_on:
-  #     - mariadb
-  #   build:
-  #     context: ./requirements/wordpress
-  #     dockerfile: Dockerfile
-  #     args:
-  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
-  #   env_file:
-  #     - ./.env
-  #   expose:
-  #     - "9000"
-  #   volumes:
-  #     - wordpress_volume:/var/www/html
-  #   restart: on-failure
-  #   networks:
-  #     - inception_network
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    # depends_on:
+    #   - mariadb
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    env_file:
+      - ./.env
+    expose:
+      - "9000"
+    volumes:
+      - wordpress_volume:/var/www/html
+    restart: on-failure
+    networks:
+      - inception_network
 
 volumes:
   # Define a volume named 'mariadb_volume'
