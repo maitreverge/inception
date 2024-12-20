@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/09/23 18:35:28 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/20 08:51:01 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ all : up
 # -f : Specify the target when docker-compose is in another location
 # -d : Run in detached mode.
 up: create_volume
-	@docker compose -f srcs/docker-compose.yml up --build
+	@docker compose -f srcs/docker-compose.yml up --build -d
 
 down:
 	@docker compose -f srcs/docker-compose.yml down
