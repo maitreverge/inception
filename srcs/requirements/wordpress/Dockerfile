@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 18:37:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/20 11:57:20 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/20 15:15:46 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,10 @@ RUN		apt-get update -y && \
 
 COPY conf/launchWP.sh /
 
-RUN chmod +x launchWP.sh
+RUN chmod +x /launchWP.sh
 
-ENTRYPOINT ["/usr/sbin/php-fpm7.4", "-F"]
+RUN bash /launchWP.sh
+
+ENTRYPOINT ["bash", "/usr/sbin/php-fpm7.4", "-F"]
+# ENTRYPOINT ["bash", "launchWP.sh"]
 # ENTRYPOINT ["tail", "-f", "/dev/null"]

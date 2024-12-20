@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/14 05:58:37 by flverge           #+#    #+#              #
-#    Updated: 2024/12/20 12:19:39 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/20 15:33:06 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,12 +18,16 @@ RUN		apt-get -y update && \
     	apt-get -y install \
         mariadb-server
         
-# COPY conf/mariadb_init_script.sh /etc
+COPY conf/mariadb_init_script.sh /
 
-# RUN chmod +x etc/mariadb_init_script.sh
+RUN chmod +x /mariadb_init_script.sh
+
+RUN bash /mariadb_init_script.sh
 
 # # This expose command only serves as documentation
 # # as the real exposing process happens to be in the docker-compose
-# EXPOSE 3306
+EXPOSE 3306
         
-ENTRYPOINT [ "/usr/bin/mysqld_safe" ]
+# ENTRYPOINT [ "bash", "/mariadb_init_script.sh" ]
+# CMD /usr/bin/mysqld_safe
+ENTRYPOINT [ "bash", "/usr/bin/mysqld_safe" ]

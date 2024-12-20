@@ -1,0 +1,22 @@
+mkdir: cannot create directory '/var/www/': File exists
+mkdir: cannot create directory '/var/www/html': File exists
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 6882k  100 6882k    0     0  1591k      0  0:00:04  0:00:04 --:--:-- 1591k
+mv: cannot stat '/var/www/html/wp-config-sample.php': No such file or directory
+sed: can't read wp-config.php: No such file or directory
+sed: can't read wp-config.php: No such file or directory
+sed: can't read wp-config.php: No such file or directory
+sed: can't read wp-config.php: No such file or directory
+Error: This does not seem to be a WordPress installation.
+The used path is: /var/www/html/
+Pass --path=`path/to/wordpress` or run `wp core download`.
+Error: This does not seem to be a WordPress installation.
+The used path is: /var/www/html/
+Pass --path=`path/to/wordpress` or run `wp core download`.
+Error: This does not seem to be a WordPress installation.
+The used path is: /var/www/html/
+Pass --path=`path/to/wordpress` or run `wp core download`.
+/usr/sbin/php-fpm7.4: /usr/sbin/php-fpm7.4: cannot execute binary file
+mkdir: cannot create directory '/var/www/': File exists
+mkdir: cannot create directory '/var/www/html': File exists

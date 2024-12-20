@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/12/20 08:51:01 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/20 15:56:02 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,12 @@ all : up
 # -f : Specify the target when docker-compose is in another location
 # -d : Run in detached mode.
 up: create_volume
+	@sudo apt-get -y install hostsed
+	@sudo hostsed add 127.0.0.1 flverge.42.fr && echo "\033[1;32m~|ADD flverge.42.fr to /etc/hosts|~\033[0m"
 	@docker compose -f srcs/docker-compose.yml up --build -d
 
 down:
+	@sudo hostsed rm 127.0.0.1 flverge.42.fr && echo "\033[1;31m~|DELETE flverge.42.fr from /etc/hosts|~\033[0m"
 	@docker compose -f srcs/docker-compose.yml down
 
 re: clean up
@@ -32,13 +35,13 @@ prod: down up
 
 create_volume:
 	@echo "Creating MariaDB volume"
-	@mkdir -p /home/${USER}/data/mysql
+	@mkdir -p /home/${USER}/data/mariadb
 	@echo "Creating wordpress volume"
 	@mkdir -p /home/${USER}/data/wordpress
 
 delete_volume:
 	@echo "Deleting volumes"
-	@sudo rm -rf /home/${USER}/data/mysql
+	@sudo rm -rf /home/${USER}/data/mariadb
 	@sudo rm -rf /home/${USER}/data/wordpress
 	@echo "Volumes deteted"
 	

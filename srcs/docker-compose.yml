@@ -7,8 +7,7 @@ services:
     # depends-on does tell compose on which order to start the containers.
     # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
     depends_on:
-      wordpress:
-        condition: service_started
+      - wordpress
     build:
       # Target the Dockerfile location
       context: ./requirements/nginx
@@ -58,8 +57,7 @@ services:
     container_name: wordpress
     image: wordpress
     depends_on:
-      mariadb:
-        condition: service_started
+      - mariadb
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
