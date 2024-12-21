@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/12/20 15:56:02 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/21 12:36:08 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,4 +44,5 @@ delete_volume:
 	@sudo rm -rf /home/${USER}/data/mariadb
 	@sudo rm -rf /home/${USER}/data/wordpress
 	@echo "Volumes deteted"
-	
+
+.PHONY : all up down re cle prod create_volume delete_volume
