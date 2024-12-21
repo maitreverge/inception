@@ -1,5 +1,44 @@
 # Docker compose is a tool to manage multi-containers app, run and stop them with one command
 services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build:
+      context: ./requirements/mariadb
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    # Not available during the building process, only when container starts
+    env_file:
+      - .env
+    # Expose = Expose ports within a Docker Networks. Port : make a port available to the host
+    expose:
+      - 3306
+    volumes:
+      - mariadb_volume:/var/lib/mysql # data location (see config file)
+    # Should run continuously but can be stopped manually
+    restart: unless-stopped
+    networks:
+      - inception_network
+
+  # wordpress:
+  #   container_name: wordpress
+  #   image: wordpress
+  #   depends_on:
+  #     - mariadb
+  #   build:
+  #     context: ./requirements/wordpress
+  #     args:
+  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
+  #   env_file:
+  #     - .env
+  #   expose:
+  #     - 9000
+  #   volumes:
+  #     - wordpress_volume:/var/www/html
+  #   restart: on-failure
+  #   networks:
+  #     - inception_network
+
   # nginx:
   #   container_name: nginx
   #   # Name image
@@ -23,7 +62,7 @@ services:
   #     - 443:443
   #   # Run time env variables plugged as variables envs in the container
   #   env_file:
-  #     - ./.env
+  #     - .env
   #   # Define which part of the container is a bind mount (see note lower)
   #   volumes:
   #     - wordpress_volume:/var/www/html
@@ -33,43 +72,7 @@ services:
   #   networks:
   #     - inception_network
 
-  mariadb:
-    container_name: mariadb
-    image: mariadb
-    build:
-      context: ./requirements/mariadb
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-    env_file:
-      - ./.env
-    # Expose = Expose ports within a Docker Networks. Port : make a port available to the host
-    expose:
-      - 3306
-    volumes:
-      - mariadb_volume:/var/lib/mysql # data location (see config file)
-    # Should run continuously but can be stopped manually
-    restart: unless-stopped
-    networks:
-      - inception_network
 
-    wordpress:
-      container_name: wordpress
-      image: wordpress
-      depends_on:
-        - mariadb
-      build:
-        context: ./requirements/wordpress
-        args:
-          DEBIAN_VERSION: ${DEBIAN_VERSION}
-      env_file:
-        - ./.env
-      expose:
-        - 9000
-      volumes:
-        - wordpress_volume:/var/www/html
-      restart: on-failure
-      networks:
-        - inception_network
 
 volumes:
   # Define a volume named 'mariadb_volume'
