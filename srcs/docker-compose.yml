@@ -1,51 +1,50 @@
 # Docker compose is a tool to manage multi-containers app, run and stop them with one command
 services:
-  nginx:
-    container_name: nginx
-    # Name image
-    image: nginx
-    # depends-on does tell compose on which order to start the containers.
-    # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
-    depends_on:
-      - wordpress
-    build:
-      # Target the Dockerfile location
-      context: ./requirements/nginx
-      # Over specify only if Dockerfile is not named Dockerfile
-      dockerfile: Dockerfile
-      # Build time arguments
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-        PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
-        PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
-    # Map host ports to container ports
-    ports:
-      - "443:443"
-    # Run time env variables plugged as variables envs in the container
-    env_file:
-      - ./.env
-    # Define which part of the container is a bind mount (see note lower)
-    volumes:
-      - wordpress_volume:/var/www/html
-    # Critical service, should always be running
-    restart: always
-    # Include the container in the network.
-    networks:
-      - inception_network
+  # nginx:
+  #   container_name: nginx
+  #   # Name image
+  #   image: nginx
+  #   # depends-on does tell compose on which order to start the containers.
+  #   # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
+  #   depends_on:
+  #     - wordpress
+  #   build:
+  #     # Target the Dockerfile location
+  #     context: ./requirements/nginx
+  #     # Over specify only if Dockerfile is not named Dockerfile
+  #     dockerfile: Dockerfile
+  #     # Build time arguments
+  #     args:
+  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
+  #       PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
+  #       PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
+  #   # Map host ports to container ports
+  #   ports:
+  #     - 443:443
+  #   # Run time env variables plugged as variables envs in the container
+  #   env_file:
+  #     - ./.env
+  #   # Define which part of the container is a bind mount (see note lower)
+  #   volumes:
+  #     - wordpress_volume:/var/www/html
+  #   # Critical service, should always be running
+  #   restart: always
+  #   # Include the container in the network.
+  #   networks:
+  #     - inception_network
 
   mariadb:
     container_name: mariadb
     image: mariadb
     build:
       context: ./requirements/mariadb
-      dockerfile: Dockerfile
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
     env_file:
       - ./.env
-    # This expose really works the way it is suppose to be
+    # Expose = Expose ports within a Docker Networks. Port : make a port available to the host
     expose:
-      - "3306"
+      - 3306
     volumes:
       - mariadb_volume:/var/lib/mysql # data location (see config file)
     # Should run continuously but can be stopped manually
@@ -53,25 +52,24 @@ services:
     networks:
       - inception_network
 
-  wordpress:
-    container_name: wordpress
-    image: wordpress
-    depends_on:
-      - mariadb
-    build:
-      context: ./requirements/wordpress
-      dockerfile: Dockerfile
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-    env_file:
-      - ./.env
-    expose:
-      - "9000"
-    volumes:
-      - wordpress_volume:/var/www/html
-    restart: on-failure
-    networks:
-      - inception_network
+    wordpress:
+      container_name: wordpress
+      image: wordpress
+      depends_on:
+        - mariadb
+      build:
+        context: ./requirements/wordpress
+        args:
+          DEBIAN_VERSION: ${DEBIAN_VERSION}
+      env_file:
+        - ./.env
+      expose:
+        - 9000
+      volumes:
+        - wordpress_volume:/var/www/html
+      restart: on-failure
+      networks:
+        - inception_network
 
 volumes:
   # Define a volume named 'mariadb_volume'

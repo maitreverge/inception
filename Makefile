@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/12/21 12:36:08 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/21 14:46:34 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ re: clean up
 clean: down delete_volume
 	@docker system prune --all --force
 
-prod: down up
+prod: down delete_volume create_volume up
 
 create_volume:
 	@echo "Creating MariaDB volume"
