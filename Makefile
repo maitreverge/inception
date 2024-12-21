@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/12/21 17:28:28 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/21 19:04:57 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ down:
 	@sudo hostsed rm 127.0.0.1 flverge.42.fr && echo "\033[1;31m~|DELETE flverge.42.fr from /etc/hosts|~\033[0m"
 	@docker compose -f srcs/docker-compose.yml down
 
-re: down up
+re: clean up
 	@docker compose -f srcs/docker-compose.yml up --build -d
 
 # faire peter les networks

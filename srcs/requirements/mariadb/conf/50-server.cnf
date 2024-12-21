@@ -12,7 +12,7 @@
 # * Basic Settings
 #
 
-user                    = mysql
+user                    = root
 pid-file                = /run/mysqld/mysqld.pid
 basedir                 = /usr
 datadir                 = /var/lib/mysql
@@ -30,6 +30,8 @@ skip-external-locking
 bind-address            = 0.0.0.0
 
 port = 3306
+
+socket  = /run/mysqld/mysqld.sock
 
 #
 # * Fine Tuning

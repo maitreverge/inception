@@ -1,12 +1,8 @@
 #!/bin/sh
 
 # As long as the MySQL command to connect to the MariaDB server returns an error (i.e., the server is not ready or the connection fails), keep executing the loop.
-counter=3
-until mysql -u root -p"${MARIADB_ROOT_PASSWORD}" -h "mariadb" --silent; do
-    dots=$(printf "%${counter}s" | tr ' ' '.') # trailing dots that nobody will pay attention to, because Inception isn't complicated enough
-    echo "Wordpress container waiting for MariaDB connection${dots}"
-    sleep 1
-    counter=$((counter + 1))
+until mysql -u root -p"${MARIADB_ROOT_PASSWORD}" -h mariadb -P 3306 --silent; do # ! WORK NEEDLE
+    echo "Wordpress container waiting for MariaDB connection$..."
 done
 # No need to disconnect from mysql afterwards, commands  within a `until` stays within this scope.
 
