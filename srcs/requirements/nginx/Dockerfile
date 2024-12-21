@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/12/20 13:08:09 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/21 15:12:51 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,8 @@ RUN		openssl req -x509 \
         -keyout ${PATH_NGINX_TSL_KEY}/inception.key \
         -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=flverge.42.fr/UID=flverge"
 
+# Expose DockerFile directive only serves a documentation process
+# The real port-binding happens in the docker-compose
 EXPOSE 443
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

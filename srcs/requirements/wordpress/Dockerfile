@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 18:37:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/20 15:15:46 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/21 17:30:58 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,18 +20,12 @@ RUN		apt-get update -y && \
         php-fpm \
 		php-mysql
 
-# # Create the directory for making the container up.
-# RUN mkdir -p /run/php
-
-# Copy config file for php
-# COPY conf/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
-
 COPY conf/launchWP.sh /
 
-RUN chmod +x /launchWP.sh
+RUN chmod +x launchWP.sh
 
-RUN bash /launchWP.sh
+# RUN bash launchWP.sh
 
-ENTRYPOINT ["bash", "/usr/sbin/php-fpm7.4", "-F"]
-# ENTRYPOINT ["bash", "launchWP.sh"]
+ENTRYPOINT ["bash", "launchWP.sh"]
+# ENTRYPOINT ["bash", "/usr/sbin/php-fpm7.4", "-F"]
 # ENTRYPOINT ["tail", "-f", "/dev/null"]

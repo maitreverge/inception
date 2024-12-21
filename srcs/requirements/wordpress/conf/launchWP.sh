@@ -35,11 +35,12 @@ if [ ! -f "/usr/local/bin/wp" ]; then
 	chmod +x wp-cli.phar
 	sudo mv wp-cli.phar /usr/local/bin/wp
 else
-    echo "WordPress CLI is already installed"
+    echo "***** WordPress CLI is already installed *****"
 fi
 
 # Checks if WP has already been configured
 if [ ! -f "/var/www/html/wp-config.php" ]; then
+	
 	# Download Main Wordpress
 	echo "Downloading Wordpress ..............."
 	wp core download --allow-root
@@ -80,13 +81,15 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 	# Change the line `listen = /run/php/php7.4-fpm.sock`` into `listen = 9000`
 	sed -i 's|listen = /run/php/php7.4-fpm.sock|listen = 9000|' /etc/php/7.4/fpm/pool.d/www.conf
 else
-    echo "WordPress has already been configured"
+    echo "***** WordPress has already been configured *****"
 fi
 
 
 if [ ! -d "/run/php" ]; then
     mkdir -p /run/php
     echo "Created /run/php directory."
+else
+    echo "***** /run/php directory already exists *****"
 fi
 
 # REDIS BONUS

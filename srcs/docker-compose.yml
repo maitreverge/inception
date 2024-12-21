@@ -1,4 +1,8 @@
 # Docker compose is a tool to manage multi-containers app, run and stop them with one command
+
+################################################################################
+############################### DOCKER  SERVICES ###############################
+################################################################################
 services:
   mariadb:
     container_name: mariadb
@@ -20,58 +24,65 @@ services:
     networks:
       - inception_network
 
-  # wordpress:
-  #   container_name: wordpress
-  #   image: wordpress
-  #   depends_on:
-  #     - mariadb
-  #   build:
-  #     context: ./requirements/wordpress
-  #     args:
-  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
-  #   env_file:
-  #     - .env
-  #   expose:
-  #     - 9000
-  #   volumes:
-  #     - wordpress_volume:/var/www/html
-  #   restart: on-failure
-  #   networks:
-  #     - inception_network
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    depends_on:
+      - mariadb
+    build:
+      context: ./requirements/wordpress
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    env_file:
+      - .env
+    expose:
+      - 9000
+    volumes:
+      - wordpress_volume:/var/www/html
+    restart: on-failure
+    networks:
+      - inception_network
 
-  # nginx:
-  #   container_name: nginx
-  #   # Name image
-  #   image: nginx
-  #   # depends-on does tell compose on which order to start the containers.
-  #   # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
-  #   depends_on:
-  #     - wordpress
-  #   build:
-  #     # Target the Dockerfile location
-  #     context: ./requirements/nginx
-  #     # Over specify only if Dockerfile is not named Dockerfile
-  #     dockerfile: Dockerfile
-  #     # Build time arguments
-  #     args:
-  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
-  #       PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
-  #       PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
-  #   # Map host ports to container ports
-  #   ports:
-  #     - 443:443
-  #   # Run time env variables plugged as variables envs in the container
-  #   env_file:
-  #     - .env
-  #   # Define which part of the container is a bind mount (see note lower)
-  #   volumes:
-  #     - wordpress_volume:/var/www/html
-  #   # Critical service, should always be running
-  #   restart: always
-  #   # Include the container in the network.
-  #   networks:
-  #     - inception_network
+  nginx:
+    container_name: nginx
+    # Name image
+    image: nginx
+    # depends-on does tell compose on which order to start the containers.
+    # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
+    depends_on:
+      - wordpress
+    build:
+      # Target the Dockerfile location
+      context: ./requirements/nginx
+      # Over specify only if Dockerfile is not named Dockerfile
+      dockerfile: Dockerfile
+      # Build time arguments
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+        PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
+        PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
+    # Map host ports to container ports
+    ports:
+      - 443:443
+    # Run time env variables plugged as variables envs in the container
+    env_file:
+      - .env
+    # Define which part of the container is a bind mount (see note lower)
+    volumes:
+      - wordpress_volume:/var/www/html
+    # Critical service, should always be running
+    restart: always
+    # Include the container in the network.
+    networks:
+      - inception_network
 
+################################################################################
+################################ DOCKER VOLUMES ################################
+################################################################################
+
+#                   !  NOTE ON BIND MOUNT
+# A bind mount allows you to mount a directory or file from the host machine
+# into the container. This is useful for sharing data between the host and the container.
 
 
 volumes:
@@ -95,10 +106,10 @@ volumes:
       type: none
       device: '/home/${USER}/data/wordpress'  
       o: bind
-#                   !  NOTE ON BIND MOUNT
-# A bind mount allows you to mount a directory or file from the host machine
-# into the container. This is useful for sharing data between the host and the container.
 
+################################################################################
+################################ DOCKER NETWORK ################################
+################################################################################
 networks:
   inception_network:
     name: inception_network
