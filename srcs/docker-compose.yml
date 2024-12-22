@@ -23,10 +23,9 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
-      interval: 5s # Run the healthcheck every 5 seconds
+      interval: 10s # Run the healthcheck every 5 seconds
       timeout: 5s # If the command does not success in this timeframe, healthcheck fails
       retries: 5 # Number of consecutive failures before marking the container as unhealthy 
-      start-period: 8s # Wait 10 seconds before starting the healthcheck
     networks:
       - inception_network
 

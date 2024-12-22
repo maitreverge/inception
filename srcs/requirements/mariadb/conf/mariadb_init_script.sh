@@ -11,7 +11,7 @@ if [ -z "$MARIADB_DATABASE_NAME" ] || [ -z "$MARIADB_ROOT_PASSWORD" ] || [ -z "$
 fi
 
 # Launching mysql as a background task
-mysqld_safe --skip-networking &
+mysqld_safe &
 
 echo "Starting MariaDB daemon process: $MARIADB_DATABASE_NAME ..."
 sleep 5

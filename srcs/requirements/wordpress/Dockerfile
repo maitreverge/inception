@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 18:37:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/22 11:17:23 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/22 12:03:08 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ RUN		apt-get update -y && \
 		sudo \
 		curl \
         php-fpm \
-		php-mysql \
+		php-mysql
 
 COPY conf/launchWP.sh /
 
