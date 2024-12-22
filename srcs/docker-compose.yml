@@ -44,39 +44,45 @@ services:
     volumes:
       - wordpress_volume:/var/www/html
     restart: on-failure
+    healthcheck:
+      test: ["CMD", "sh", "-c", "[ -d /run/php ]"]
+      interval: 10s # Run the healthcheck every 5 seconds
+      timeout: 5s # If the command does not success in this timeframe, healthcheck fails
+      retries: 5 # Number of consecutive failures before marking the container as unhealthy 
     networks:
       - inception_network
 
-  # nginx:
-  #   container_name: nginx
-  #   # depends-on does tell compose on which order to start the containers.
-  #   # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
-  #   depends_on:
-  #     - wordpress
-  #   build:
-  #     # Target the Dockerfile location
-  #     context: ./requirements/nginx
-  #     # Over specify only if Dockerfile is not named Dockerfile
-  #     dockerfile: Dockerfile
-  #     # Build time arguments
-  #     args:
-  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
-  #       PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
-  #       PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
-  #   # Map host ports to container ports
-  #   ports:
-  #     - 443:443
-  #   # Run time env variables plugged as variables envs in the container
-  #   env_file:
-  #     - .env
-  #   # Define which part of the container is a bind mount (see note lower)
-  #   volumes:
-  #     - wordpress_volume:/var/www/html
-  #   # Critical service, should always be running
-  #   restart: always
-  #   # Include the container in the network.
-  #   networks:
-  #     - inception_network
+  nginx:
+    container_name: nginx
+    # depends-on does tell compose on which order to start the containers.
+    # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    build:
+      # Target the Dockerfile location
+      context: ./requirements/nginx
+      # Over specify only if Dockerfile is not named Dockerfile
+      dockerfile: Dockerfile
+      # Build time arguments
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+        PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
+        PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
+    # Map host ports to container ports
+    ports:
+      - 443:443
+    # Run time env variables plugged as variables envs in the container
+    env_file:
+      - .env
+    # Define which part of the container is a bind mount (see note lower)
+    volumes:
+      - wordpress_volume:/var/www/html
+    # Critical service, should always be running
+    restart: always
+    # Include the container in the network.
+    networks:
+      - inception_network
 
 ################################################################################
 ################################ DOCKER VOLUMES ################################
