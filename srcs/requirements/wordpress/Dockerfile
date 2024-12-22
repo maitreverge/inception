@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 18:37:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/21 19:37:17 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/22 11:17:23 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ RUN		apt-get update -y && \
 		curl \
         php-fpm \
 		php-mysql \
-		mariadb-client
 
 COPY conf/launchWP.sh /
 
@@ -27,6 +26,6 @@ RUN chmod +x launchWP.sh
 
 # RUN bash launchWP.sh
 
-# ENTRYPOINT ["bash", "launchWP.sh"]
+ENTRYPOINT ["bash", "launchWP.sh"]
 # ENTRYPOINT ["bash", "/usr/sbin/php-fpm7.4", "-F"]
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+# ENTRYPOINT ["tail", "-f", "/dev/null"]

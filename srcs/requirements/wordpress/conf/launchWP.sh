@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # As long as the MySQL command to connect to the MariaDB server returns an error (i.e., the server is not ready or the connection fails), keep executing the loop.
-until mysql -u root -p"${MARIADB_ROOT_PASSWORD}" -h mariadb -P 3306 --silent; do # ! WORK NEEDLE
-    echo "Wordpress container waiting for MariaDB connection$..."
-done
+# until mysql -u root -p"${MARIADB_ROOT_PASSWORD}" -h mariadb -P 3306 --silent; do
+#     echo "Wordpress container waiting for MariaDB connection$..."
+# done
 # No need to disconnect from mysql afterwards, commands  within a `until` stays within this scope.
 
 echo "MariaDB is up and running."
@@ -30,8 +30,10 @@ if [ ! -f "/usr/local/bin/wp" ]; then
 	# Typing wp instead of php wp-cli.phar
 	chmod +x wp-cli.phar
 	sudo mv wp-cli.phar /usr/local/bin/wp
+    
+	echo -e "\033[0;32m***** WordPress CLI SUCCESSFULLY installed *****\033[0m"
 else
-    echo "***** WordPress CLI is already installed *****"
+    echo -e "\033[0;33m***** WordPress CLI is already installed *****\033[0m"
 fi
 
 # Checks if WP has already been configured
@@ -76,16 +78,18 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 
 	# Change the line `listen = /run/php/php7.4-fpm.sock`` into `listen = 9000`
 	sed -i 's|listen = /run/php/php7.4-fpm.sock|listen = 9000|' /etc/php/7.4/fpm/pool.d/www.conf
+    
+	echo "\033[0;32m***** WordPress has been SUCCESSFULLY configured *****\033[0m"
 else
-    echo "***** WordPress has already been configured *****"
+    echo "\033[0;33m***** WordPress has ALREADY been configured *****\033[0m"
 fi
 
 
 if [ ! -d "/run/php" ]; then
     mkdir -p /run/php
-    echo "Created /run/php directory."
+    echo "\033[0;32mCreated /run/php directory.\033[0m"
 else
-    echo "***** /run/php directory already exists *****"
+    echo "\033[0;33m***** /run/php directory already exists *****\033[0m"
 fi
 
 # REDIS BONUS

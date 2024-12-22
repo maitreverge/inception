@@ -14,7 +14,7 @@ fi
 mysqld_safe --skip-networking &
 
 echo "Starting MariaDB daemon process: $MARIADB_DATABASE_NAME ..."
-sleep 10
+sleep 5
 
 echo "CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';" > init_db.sql # DONE
 echo "ALTER USER 'root'@'%' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';" >> init_db.sql # DONE
