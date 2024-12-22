@@ -6,7 +6,6 @@
 services:
   mariadb:
     container_name: mariadb
-    image: mariadb
     build:
       context: ./requirements/mariadb
       args:
@@ -31,7 +30,6 @@ services:
 
   wordpress:
     container_name: wordpress
-    image: wordpress
     depends_on:
       mariadb:
         condition: service_healthy
@@ -51,8 +49,6 @@ services:
 
   # nginx:
   #   container_name: nginx
-  #   # Name image
-  #   image: nginx
   #   # depends-on does tell compose on which order to start the containers.
   #   # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
   #   depends_on:
