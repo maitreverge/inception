@@ -18,9 +18,6 @@ mkdir -p /var/www/html
 
 cd /var/www/html
 
-#Cleaning old stuff
-rm -rf /var/www/html/*
-
 # Check if WP-CLI already has been installed
 if [ ! -f "/usr/local/bin/wp" ]; then
 	# Install Wordpress CLI
@@ -57,15 +54,15 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 
 	# /** Database username */
 	# define( 'DB_USER', 'username_here' );
-	sed -i -r "s|username_here|$MARIADB_USER_LOGIN|1"  /var/www/html/wp-config.php
+	sed -i -r "s|username_here|$MARIADB_ROOT_LOGIN|1"  /var/www/html/wp-config.php
 
-	cat /var/www/html/wp-config.php | grep $MARIADB_USER_LOGIN
+	cat /var/www/html/wp-config.php | grep $MARIADB_ROOT_LOGIN
 
 	# /** Database password */
 	# define( 'DB_PASSWORD', 'password_here' );
-	sed -i -r "s|password_here|$MARIADB_USER_PASSWORD|1"    /var/www/html/wp-config.php
+	sed -i -r "s|password_here|$MARIADB_ROOT_PASSWORD|1"    /var/www/html/wp-config.php
 	
-	cat /var/www/html/wp-config.php | grep $MARIADB_USER_PASSWORD
+	cat /var/www/html/wp-config.php | grep $MARIADB_ROOT_PASSWORD
 
 	# /** Database hostname */
 	# define( 'DB_HOST', 'localhost' );
