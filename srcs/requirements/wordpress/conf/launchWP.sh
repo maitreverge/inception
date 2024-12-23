@@ -79,7 +79,7 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 
 	wp user create $WP_USER_LOGIN $WP_USER_EMAIL --role=author --user_pass=$WP_USER_PASSWORD --allow-root
 
-	wp theme install codeify --activate --allow-root
+	# wp theme install codeify --activate --allow-root
 
 	# REDIS BONUS
 	# wp plugin install redis-cache --activate --allow-root
