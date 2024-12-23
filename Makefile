@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/12/22 16:01:03 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/23 12:30:49 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ up: create_volume
 	@echo "\n\033[1;33m***| UP-ING CONTAINERS |***\033[0m\n"
 	@sudo hostsed add 127.0.0.1 flverge.42.fr > /dev/null
 	@echo "\n\033[1;32m***| ADD flverge.42.fr to /etc/hosts |***\033[0m\n"
-	@docker compose -f srcs/docker-compose.yml up --d
+	@docker compose -f srcs/docker-compose.yml up --detach
 	@echo "\n\033[1;32m***| CONTAINERS UP |***\033[0m\n"
 
 down:

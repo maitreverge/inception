@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
-      interval: 10s # Run the healthcheck every 5 seconds
+      interval: 5s # Run the healthcheck every 5 seconds
       timeout: 5s # If the command does not success in this timeframe, healthcheck fails
       retries: 5 # Number of consecutive failures before marking the container as unhealthy 
     networks:
@@ -46,7 +46,7 @@ services:
     restart: on-failure
     healthcheck:
       test: ["CMD", "sh", "-c", "[ -d /run/php ]"]
-      interval: 10s # Run the healthcheck every 5 seconds
+      interval: 5s # Run the healthcheck every 5 seconds
       timeout: 5s # If the command does not success in this timeframe, healthcheck fails
       retries: 5 # Number of consecutive failures before marking the container as unhealthy 
     networks:

@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/12/21 15:12:51 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/23 13:10:40 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ RUN		apt-get update -y && \
         openssl
         
 # Copy the conf file
-COPY conf/nginx.conf /etc/nginx/sites-available/default
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 # Give authorization on the root
 RUN chmod 755 /var/www/html
