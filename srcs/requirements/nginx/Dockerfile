@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/12/23 13:10:40 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/23 13:25:40 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,9 @@ FROM debian:${DEBIAN_VERSION:-bullseye}
 
 # Basics container packages
 RUN		apt-get update -y && \
-		apt-get install -y \
-        nginx \
-        openssl
+		apt-get install -y nginx openssl && \
+		apt-get clean && \
+		rm -rf /var/lib/apt/lists/*
         
 # Copy the conf file
 COPY conf/nginx.conf /etc/nginx/nginx.conf

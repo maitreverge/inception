@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/14 05:58:37 by flverge           #+#    #+#              #
-#    Updated: 2024/12/22 12:44:34 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/23 13:25:59 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ FROM debian:${DEBIAN_VERSION:-bullseye}
 
 # Basics container packages
 RUN		apt-get -y update && \
-    	apt-get -y install \
-		vim \
-        mariadb-server
+    	apt-get -y install mariadb-server && \
+		apt-get clean && \
+		rm -rf /var/lib/apt/lists/*
         
 COPY conf/50-server.cnf /etc/mysql/my.cnf
 
