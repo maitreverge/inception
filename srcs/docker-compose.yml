@@ -110,6 +110,8 @@ services:
       context: ./requirements/bonus/2_ftp
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+        FTP_USER: ${FTP_USER}
+        FTP_PASSWORD: ${FTP_PASSWORD}
     env_file:
       - .env
     ports:

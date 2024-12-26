@@ -20,9 +20,8 @@ chown -R $FTP_USER:$FTP_USER /var/www/html
 
 # /usr/sbin/vsftpd
 
-systemctl start vsftpd
+systemctl restart vsftpd
 
-bash /usr/sbin/vsftpd /etc/vsftpd.conf
 
 
 # tail -f /dev/null
