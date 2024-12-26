@@ -50,26 +50,18 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 	# define( 'DB_NAME', 'database_name_here' );
 	sed -i -r "s|database_name_here|$MARIADB_DATABASE_NAME|1"   /var/www/html/wp-config.php
 
-	cat /var/www/html/wp-config.php | grep $MARIADB_DATABASE_NAME
-
 	# /** Database username */
 	# define( 'DB_USER', 'username_here' );
 	sed -i -r "s|username_here|$MARIADB_ROOT_LOGIN|1"  /var/www/html/wp-config.php
-
-	cat /var/www/html/wp-config.php | grep $MARIADB_ROOT_LOGIN
 
 	# /** Database password */
 	# define( 'DB_PASSWORD', 'password_here' );
 	sed -i -r "s|password_here|$MARIADB_ROOT_PASSWORD|1"    /var/www/html/wp-config.php
 	
-	cat /var/www/html/wp-config.php | grep $MARIADB_ROOT_PASSWORD
-
 	# /** Database hostname */
 	# define( 'DB_HOST', 'localhost' );
 	sed -i -r "s|localhost|mariadb:3306|1"    /var/www/html/wp-config.php  #(to connect with mariadb database)
 	
-	cat /var/www/html/wp-config.php | grep mariadb
-
 	echo "Config file done "
 
 	sed -i 's|listen = /run/php/php7.4-fpm.sock|listen = wordpress:9000|' /etc/php/7.4/fpm/pool.d/www.conf
@@ -81,11 +73,22 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 
 	# wp theme install codeify --activate --allow-root
 
-	# REDIS BONUS
-	# wp plugin install redis-cache --activate --allow-root
+	################ REDIS BONUS ####################
+	
+	# Install and activate the Redis Cache plugin for WordPress
+	wp plugin install redis-cache --activate --allow-root
+	
+	# Add Redis configuration to wp-config.php
+	# Define the Redis server host
+	echo "define( 'WP_REDIS_HOST', 'redis' );" >> /var/www/html/wp-config.php
+	# Define the Redis server port
+	echo "define( 'WP_REDIS_PORT', 6379 );" >> /var/www/html/wp-config.php
+	# Enable WordPress object caching
+	echo "define('WP_CACHE', true);" >> /var/www/html/wp-config.php
+	
+	# Enable Redis caching in WordPress
+	wp redis enable --allow-root
 
-	# Change the line `listen = /run/php/php7.4-fpm.sock`` into `listen = 9000`
-    
 	echo -e "\033[0;32m***** WordPress has been SUCCESSFULLY configured *****\033[0m"
 else
     echo -e "\033[0;33m***** WordPress has ALREADY been configured *****\033[0m"
@@ -100,9 +103,6 @@ else
 fi
 
 # REDIS BONUS
-# wp redis enable --allow-root
-
-# ./php-fpm7.4 -F
 
 exec /usr/sbin/php-fpm7.4 -F
 
