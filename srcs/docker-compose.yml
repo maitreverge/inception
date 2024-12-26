@@ -112,6 +112,9 @@ services:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
     env_file:
       - .env
+    ports:
+      - 20:20 #FTP COMMAND PORT
+      - 21:21 #FTP DATA PORT
     volumes:
       - wordpress_volume:/var/www/html
     restart: always
