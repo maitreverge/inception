@@ -1,7 +1,7 @@
 # Docker compose is a tool to manage multi-containers app, run and stop them with one command
 
 ################################################################################
-############################### DOCKER  SERVICES ###############################
+############################# MANDATORY   SERVICES #############################
 ################################################################################
 services:
   mariadb:
@@ -46,9 +46,9 @@ services:
     restart: on-failure
     healthcheck:
       test: ["CMD", "sh", "-c", "[ -d /run/php ]"]
-      interval: 5s # Run the healthcheck every 5 seconds
-      timeout: 5s # If the command does not success in this timeframe, healthcheck fails
-      retries: 5 # Number of consecutive failures before marking the container as unhealthy 
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - inception_network
 
@@ -81,6 +81,26 @@ services:
     # Critical service, should always be running
     restart: always
     # Include the container in the network.
+    networks:
+      - inception_network
+
+################################################################################
+################################ BONUS SERVICES ################################
+################################################################################
+  redis:
+    container_name: redis
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    build:
+      context: ./requirements/bonus/1_redis
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    env_file:
+      - .env
+    volumes:
+      - wordpress_volume:/var/www/html
+    restart: always
     networks:
       - inception_network
 
