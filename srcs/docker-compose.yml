@@ -89,15 +89,14 @@ services:
 ################################################################################
   redis:
     container_name: redis
-    depends_on:
-      wordpress:
-        condition: service_healthy
     build:
       context: ./requirements/bonus/1_redis
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
     env_file:
       - .env
+    ports:
+      - 6379:6379
     volumes:
       - wordpress_volume:/var/www/html
     restart: always
