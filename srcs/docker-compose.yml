@@ -57,9 +57,11 @@ services:
     container_name: nginx
     # depends-on does tell compose on which order to start the containers.
     # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
-    # depends_on:
-    #   wordpress:
-    #     condition: service_healthy
+    depends_on:
+      # wordpress:
+      #   condition: service_healthy
+      static_website:
+        condition: service_started
     build:
       # Target the Dockerfile location
       context: ./requirements/nginx
@@ -73,13 +75,14 @@ services:
     # Map host ports to container ports
     ports:
       - 443:443
+      - 4242:4242
     # Run time env variables plugged as variables envs in the container
     env_file:
       - .env
     # Define which part of the container is a bind mount (see note lower)
     volumes:
       - wordpress_volume:/var/www/html
-      - static_website_volume:/var/www/static_website
+      # - static_website_volume:/var/www/static_website
     # Critical service, should always be running
     restart: always
     # Include the container in the network.
@@ -132,8 +135,8 @@ services:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
     env_file:
       - .env
-    expose:
-      - 443
+    expose: #really usefull ?
+      - 4242
     volumes:
       - static_website_volume:/var/www/static_website
     restart: always

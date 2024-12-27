@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/12/27 08:49:26 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/27 11:41:11 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ FROM debian:${DEBIAN_VERSION:-bullseye}
 
 # Basics container packages
 RUN		apt-get update -y && \
-		apt-get install -y nginx openssl && \
+		apt-get install -y nginx openssl curl && \
 		apt-get clean && \
 		rm -rf /var/lib/apt/lists/*
 
@@ -32,8 +32,8 @@ RUN chmod 755 /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 # Static_website bonuses
-RUN mkdir -p /var/www/static_website
-RUN chown -R www-data:www-data /var/www/static_website
+# RUN mkdir -p /var/www/static_website
+# RUN chown -R www-data:www-data /var/www/static_website
 
 # Build Path for certificate
 ARG PATH_NGINX_CERTIFICATE
