@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/12/23 12:30:49 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/27 08:29:14 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,12 +60,14 @@ create_volume:
 	@echo "\n\033[1;33m***| Creating Volumes |***\033[0m\n"
 	@mkdir -p /home/${USER}/data/mariadb
 	@mkdir -p /home/${USER}/data/wordpress
+	@mkdir -p /home/${USER}/data/static_website_volume
 	@echo "\n\033[1;32m***| Volumes Created |***\033[0m\n"
 
 delete_volume:
 	@echo "\n\033[1;33m***| Deleting volumes |***\033[0m\n"
 	@sudo rm -rf /home/${USER}/data/mariadb
 	@sudo rm -rf /home/${USER}/data/wordpress
+	@sudo rm -rf /home/${USER}/data/static_website_volume
 	@echo "\n\033[1;32m***| Volumes Deteted |***\033[0m\n"
 
 .PHONY : all up down du re prod clean stop start restart create_volume delete_volume

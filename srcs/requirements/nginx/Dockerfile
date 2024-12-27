@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 16:14:45 by flverge           #+#    #+#              #
-#    Updated: 2024/12/23 15:38:09 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/27 08:49:26 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ RUN		apt-get update -y && \
 		rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/run/nginx
-
+		
 # Copy the conf file
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
@@ -30,7 +30,11 @@ RUN chmod 755 /var/www/html
 
 # Give authorization on the main user
 RUN chown -R www-data:www-data /var/www/html
-        
+
+# Static_website bonuses
+RUN mkdir -p /var/www/static_website
+RUN chown -R www-data:www-data /var/www/static_website
+
 # Build Path for certificate
 ARG PATH_NGINX_CERTIFICATE
 RUN mkdir -p ${PATH_NGINX_CERTIFICATE}

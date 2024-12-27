@@ -53,37 +53,38 @@ services:
   #   networks:
   #     - inception_network
 
-  # nginx:
-  #   container_name: nginx
-  #   # depends-on does tell compose on which order to start the containers.
-  #   # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
-  #   depends_on:
-  #     wordpress:
-  #       condition: service_healthy
-  #   build:
-  #     # Target the Dockerfile location
-  #     context: ./requirements/nginx
-  #     # Over specify only if Dockerfile is not named Dockerfile
-  #     dockerfile: Dockerfile
-  #     # Build time arguments
-  #     args:
-  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
-  #       PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
-  #       PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
-  #   # Map host ports to container ports
-  #   ports:
-  #     - 443:443
-  #   # Run time env variables plugged as variables envs in the container
-  #   env_file:
-  #     - .env
-  #   # Define which part of the container is a bind mount (see note lower)
-  #   volumes:
-  #     - wordpress_volume:/var/www/html
-  #   # Critical service, should always be running
-  #   restart: always
-  #   # Include the container in the network.
-  #   networks:
-  #     - inception_network
+  nginx:
+    container_name: nginx
+    # depends-on does tell compose on which order to start the containers.
+    # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
+    # depends_on:
+    #   wordpress:
+    #     condition: service_healthy
+    build:
+      # Target the Dockerfile location
+      context: ./requirements/nginx
+      # Over specify only if Dockerfile is not named Dockerfile
+      dockerfile: Dockerfile
+      # Build time arguments
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+        PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
+        PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
+    # Map host ports to container ports
+    ports:
+      - 443:443
+    # Run time env variables plugged as variables envs in the container
+    env_file:
+      - .env
+    # Define which part of the container is a bind mount (see note lower)
+    volumes:
+      - wordpress_volume:/var/www/html
+      - static_website_volume:/var/www/static_website
+    # Critical service, should always be running
+    restart: always
+    # Include the container in the network.
+    networks:
+      - inception_network
 
 ################################################################################
 ################################ BONUS SERVICES ################################
@@ -104,21 +105,37 @@ services:
   #   networks:
   #     - inception_network
 
-  ftp:
-    container_name: ftp
+  # ftp:
+  #   container_name: ftp
+  #   build:
+  #     context: ./requirements/bonus/2_ftp
+  #     args:
+  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
+  #       FTP_USER: ${FTP_USER}
+  #       FTP_PASSWORD: ${FTP_PASSWORD}
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 20:20 #FTP COMMAND PORT
+  #     - 21:21 #FTP DATA PORT
+  #   volumes:
+  #     - wordpress_volume:/var/www/html
+  #   restart: always
+  #   networks:
+  #     - inception_network
+
+  static_website:
+    container_name: static_website
     build:
-      context: ./requirements/bonus/2_ftp
+      context: ./requirements/bonus/3_static_website
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
-        FTP_USER: ${FTP_USER}
-        FTP_PASSWORD: ${FTP_PASSWORD}
     env_file:
       - .env
-    ports:
-      - 20:20 #FTP COMMAND PORT
-      - 21:21 #FTP DATA PORT
+    expose:
+      - 443
     volumes:
-      - wordpress_volume:/var/www/html
+      - static_website_volume:/var/www/static_website
     restart: always
     networks:
       - inception_network
@@ -152,6 +169,14 @@ volumes:
     driver_opts:
       type: none
       device: '/home/${USER}/data/wordpress'  
+      o: bind
+  
+  static_website_volume:
+    driver: local
+    name: static_website_volume
+    driver_opts:
+      type: none
+      device: '/home/${USER}/data/static_website_volume'  
       o: bind
 
 ################################################################################
