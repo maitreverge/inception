@@ -5,29 +5,29 @@
 ################################################################################
 services:
 
-  # mariadb:
-  #   container_name: mariadb
-  #   build:
-  #     context: ./requirements/mariadb
-  #     args:
-  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
-  #   # Not available during the building process, only when container starts
-  #   env_file:
-  #     - .env
-  #   # Expose = Expose ports within a Docker Networks. Port : make a port available to the host
-  #   expose:
-  #     - 3306
-  #   volumes:
-  #     - mariadb_volume:/var/lib/mysql # data location (see config file)
-  #   # Should run continuously but can be stopped manually
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD", "mysqladmin", "ping", "--silent"]
-  #     interval: 5s # Run the healthcheck every 5 seconds
-  #     timeout: 5s # If the command does not success in this timeframe, healthcheck fails
-  #     retries: 5 # Number of consecutive failures before marking the container as unhealthy 
-  #   networks:
-  #     - inception_network
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    # Not available during the building process, only when container starts
+    env_file:
+      - .env
+    # Expose = Expose ports within a Docker Networks. Port : make a port available to the host
+    expose:
+      - 3306
+    volumes:
+      - mariadb_volume:/var/lib/mysql # data location (see config file)
+    # Should run continuously but can be stopped manually
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 5s # Run the healthcheck every 5 seconds
+      timeout: 5s # If the command does not success in this timeframe, healthcheck fails
+      retries: 5 # Number of consecutive failures before marking the container as unhealthy 
+    networks:
+      - inception_network
 
   # wordpress:
   #   container_name: wordpress
@@ -53,41 +53,41 @@ services:
   #   networks:
   #     - inception_network
 
-  nginx:
-    container_name: nginx
-    # depends-on does tell compose on which order to start the containers.
-    # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
-    depends_on:
-      # wordpress:
-      #   condition: service_healthy
-      static_website:
-        condition: service_started
-    build:
-      # Target the Dockerfile location
-      context: ./requirements/nginx
-      # Over specify only if Dockerfile is not named Dockerfile
-      dockerfile: Dockerfile
-      # Build time arguments
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-        PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
-        PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
-    # Map host ports to container ports
-    ports:
-      - 443:443
-      - 4242:4242
-    # Run time env variables plugged as variables envs in the container
-    env_file:
-      - .env
-    # Define which part of the container is a bind mount (see note lower)
-    volumes:
-      - wordpress_volume:/var/www/html
-      # - static_website_volume:/var/www/static_website
-    # Critical service, should always be running
-    restart: always
-    # Include the container in the network.
-    networks:
-      - inception_network
+  # nginx:
+  #   container_name: nginx
+  #   # depends-on does tell compose on which order to start the containers.
+  #   # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
+  #   depends_on:
+  #     # wordpress:
+  #     #   condition: service_healthy
+  #     static_website:
+  #       condition: service_started
+  #   build:
+  #     # Target the Dockerfile location
+  #     context: ./requirements/nginx
+  #     # Over specify only if Dockerfile is not named Dockerfile
+  #     dockerfile: Dockerfile
+  #     # Build time arguments
+  #     args:
+  #       DEBIAN_VERSION: ${DEBIAN_VERSION}
+  #       PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
+  #       PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
+  #   # Map host ports to container ports
+  #   ports:
+  #     - 443:443
+  #     - 4242:4242
+  #   # Run time env variables plugged as variables envs in the container
+  #   env_file:
+  #     - .env
+  #   # Define which part of the container is a bind mount (see note lower)
+  #   volumes:
+  #     - wordpress_volume:/var/www/html
+  #     # - static_website_volume:/var/www/static_website
+  #   # Critical service, should always be running
+  #   restart: always
+  #   # Include the container in the network.
+  #   networks:
+  #     - inception_network
 
 ################################################################################
 ################################ BONUS SERVICES ################################
@@ -145,13 +145,16 @@ services:
 
   adminer:
     container_name: adminer
+    depends_on:
+      mariadb:
+        condition: service_healthy
     build:
       context: ./requirements/bonus/4_adminer
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
     env_file:
       - .env
-    expose: #really usefull ?
+    ports:
       - 8080:8080
     volumes:
       - mariadb_volume:/var/lib/mysql # data location (see config file)
