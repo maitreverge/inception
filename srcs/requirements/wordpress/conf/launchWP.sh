@@ -106,7 +106,7 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 
 	# Update Wp Plugins
 	wp plugin update --all --allow-root
-	``
+	
 	# Enable Redis caching in WordPress
 	wp redis enable --allow-root
 

@@ -34,7 +34,7 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-      redis:
+      redis_commander:
         condition: service_started
     build:
       context: ./requirements/wordpress
@@ -93,6 +93,7 @@ services:
 ################################ BONUS SERVICES ################################
 ################################################################################
   redis:
+    hostname: redis
     container_name: redis
     depends_on:
       mariadb:
@@ -165,24 +166,26 @@ services:
 #     networks:
 #       - inception_network
 
-#   redis_commander:
-#     container_name: redis_commander
-#     depends_on:
-#       redis:
-#         condition: service_started
-#     build:
-#       context: ./requirements/bonus/5_redis_commander
-#       args:
-#         DEBIAN_VERSION: ${DEBIAN_VERSION}
-#     env_file:
-#       - .env
-#     ports:
-#       - 6380:6380
-#     volumes:
-#       - wordpress_volume:/var/www/html
-#     restart: always
-#     networks:
-#       - inception_network
+  redis_commander:
+    container_name: redis_commander
+    depends_on:
+      redis:
+        condition: service_started
+    build:
+      context: ./requirements/bonus/5_redis_commander
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    env_file:
+      - .env
+    ports:
+      - 8081:8081
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    volumes:
+      - wordpress_volume:/var/www/html
+    restart: always
+    networks:
+      - inception_network
 
 
 
