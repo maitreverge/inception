@@ -4,33 +4,42 @@
 ############################# MANDATORY   SERVICES #############################
 ################################################################################
 services:
-
   mariadb:
     container_name: mariadb
     build:
+      # Target the Dockerfile location
       context: ./requirements/mariadb
+      # Over specify `dockerfile:` only necessary if the Dockerfile is not named `Dockerfile`
+      dockerfile: Dockerfile
       args:
+        # Build time arguments, which allows to leverage env variables because....
         DEBIAN_VERSION: ${DEBIAN_VERSION}
-    # Not available during the building process, only when container starts
+    # .... ENV Variables are not available during the building process, only when container starts
     env_file:
       - .env
-    # Expose = Expose ports within a Docker Networks. Port : make a port available to the host
+    # Expose = Expose a port within a Docker Networks. The port is then not available for the host.
     expose:
       - 3306
+    # Define which part of the container is a bind mount (see note lower)
     volumes:
-      - mariadb_volume:/var/lib/mysql # data location (see config file)
-    # Should run continuously but can be stopped manually
-    restart: unless-stopped
+      - mariadb_volume:/var/lib/mysql
+    # Healthcheck : A health check is a shell command which runs continuously within the container.
+    # The healthcheck is usefull for tagging a container "Healthy", which is mostly used for
+    # synchronizing containers starting order with the `depends-on` instruction.
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
       interval: 5s # Run the healthcheck every 5 seconds
       timeout: 5s # If the command does not success in this timeframe, healthcheck fails
       retries: 10 # Number of consecutive failures before marking the container as unhealthy 
+    # Should run continuously but can be stopped manually
+    restart: unless-stopped
+    # Attach the container in a Docker network, which makes container within the same network to "talk" to each other.
     networks:
       - inception_network
 
   wordpress:
     container_name: wordpress
+    # depends-on does tell compose on which order to start the containers.
     depends_on:
       mariadb:
         condition: service_healthy
@@ -57,35 +66,27 @@ services:
 
   nginx:
     container_name: nginx
-    # depends-on does tell compose on which order to start the containers.
-    # ! IMPORTANT : docker compose can't tell if a container is ready to operate.
     depends_on:
       wordpress:
         condition: service_healthy
     build:
-      # Target the Dockerfile location
       context: ./requirements/nginx
-      # Over specify only if Dockerfile is not named Dockerfile
       dockerfile: Dockerfile
-      # Build time arguments
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
         PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
         PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
-    # Map host ports to container ports
+    # Port : make a port available to the host.
     ports:
       - 443:443
-      - 4242:4242
-    # Run time env variables plugged as variables envs in the container
+      # - 4242:4242
     env_file:
       - .env
-    # Define which part of the container is a bind mount (see note lower)
     volumes:
       - wordpress_volume:/var/www/html
       - static_website_volume:/var/www/static_website
     # Critical service, should always be running
     restart: always
-    # Include the container in the network.
     networks:
       - inception_network
 
@@ -195,7 +196,6 @@ services:
       - inception_network
 
 
-
 ################################################################################
 ################################ DOCKER VOLUMES ################################
 ################################################################################
@@ -206,15 +206,16 @@ services:
 
 
 volumes:
-  # Define a volume named 'mariadb_volume'
+  # Define a volume identified as 'mariadb_volume' only within the docker-compose
   mariadb_volume:
     # Use the local driver for the volume
     driver: local
+    # Define a name of the volume which serves as identifier for containers
     name: mariadb_volume
     driver_opts:
       # Specify the type as 'none' to use a bind mount
       type: none
-      # Path on the host machine to bind mount
+      # When assigned to a container, the mariadb_volume will reflect what's in this specified path.
       device: '/home/${USER}/data/mariadb'
       # Bind the specified host path to the volume
       o: bind
