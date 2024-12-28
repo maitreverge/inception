@@ -34,6 +34,8 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+      redis:
+        condition: service_started
     build:
       context: ./requirements/wordpress
       args:
@@ -60,8 +62,6 @@ services:
     depends_on:
       wordpress:
         condition: service_healthy
-      static_website:
-        condition: service_started
     build:
       # Target the Dockerfile location
       context: ./requirements/nginx
@@ -111,78 +111,78 @@ services:
     networks:
       - inception_network
 
-  ftp:
-    container_name: ftp
-    build:
-      context: ./requirements/bonus/2_ftp
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-        FTP_USER: ${FTP_USER}
-        FTP_PASSWORD: ${FTP_PASSWORD}
-    env_file:
-      - .env
-    ports:
-      - 20:20 #FTP COMMAND PORT
-      - 21:21 #FTP DATA PORT
-    volumes:
-      - wordpress_volume:/var/www/html
-    restart: always
-    networks:
-      - inception_network
+#   ftp:
+#     container_name: ftp
+#     build:
+#       context: ./requirements/bonus/2_ftp
+#       args:
+#         DEBIAN_VERSION: ${DEBIAN_VERSION}
+#         FTP_USER: ${FTP_USER}
+#         FTP_PASSWORD: ${FTP_PASSWORD}
+#     env_file:
+#       - .env
+#     ports:
+#       - 20:20 #FTP COMMAND PORT
+#       - 21:21 #FTP DATA PORT
+#     volumes:
+#       - wordpress_volume:/var/www/html
+#     restart: always
+#     networks:
+#       - inception_network
 
-  static_website:
-    container_name: static_website
-    build:
-      context: ./requirements/bonus/3_static_website
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-    env_file:
-      - .env
-    expose: #really usefull ?
-      - 4242
-    volumes:
-      - static_website_volume:/var/www/static_website
-    restart: always
-    networks:
-      - inception_network
+#   static_website:
+#     container_name: static_website
+#     build:
+#       context: ./requirements/bonus/3_static_website
+#       args:
+#         DEBIAN_VERSION: ${DEBIAN_VERSION}
+#     env_file:
+#       - .env
+#     expose: #really usefull ?
+#       - 4242
+#     volumes:
+#       - static_website_volume:/var/www/static_website
+#     restart: always
+#     networks:
+#       - inception_network
 
-  adminer:
-    container_name: adminer
-    depends_on:
-      mariadb:
-        condition: service_healthy
-    build:
-      context: ./requirements/bonus/4_adminer
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-    env_file:
-      - .env
-    ports:
-      - 8080:8080
-    volumes:
-      - mariadb_volume:/var/lib/mysql # data location (see config file)
-    restart: always
-    networks:
-      - inception_network
+#   adminer:
+#     container_name: adminer
+#     depends_on:
+#       mariadb:
+#         condition: service_healthy
+#     build:
+#       context: ./requirements/bonus/4_adminer
+#       args:
+#         DEBIAN_VERSION: ${DEBIAN_VERSION}
+#     env_file:
+#       - .env
+#     ports:
+#       - 8080:8080
+#     volumes:
+#       - mariadb_volume:/var/lib/mysql # data location (see config file)
+#     restart: always
+#     networks:
+#       - inception_network
 
-  redis_commander:
-    container_name: redis_commander
-    depends_on:
-      redis:
-        condition: service_started
-    build:
-      context: ./requirements/bonus/5_redis_commander
-      args:
-        DEBIAN_VERSION: ${DEBIAN_VERSION}
-    env_file:
-      - .env
-    ports:
-      - 6380:6380
-    volumes:
-      - wordpress_volume:/var/www/html
-    restart: always
-    networks:
-      - inception_network
+#   redis_commander:
+#     container_name: redis_commander
+#     depends_on:
+#       redis:
+#         condition: service_started
+#     build:
+#       context: ./requirements/bonus/5_redis_commander
+#       args:
+#         DEBIAN_VERSION: ${DEBIAN_VERSION}
+#     env_file:
+#       - .env
+#     ports:
+#       - 6380:6380
+#     volumes:
+#       - wordpress_volume:/var/www/html
+#     restart: always
+#     networks:
+#       - inception_network
 
 
 

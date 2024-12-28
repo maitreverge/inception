@@ -75,8 +75,6 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 
 	################ REDIS BONUS ####################
 	
-	# Install and activate the Redis Cache plugin for WordPress
-	wp plugin install redis-cache --activate --allow-root
 	
 	# Add Redis configuration to wp-config.php
 	# Define the Redis server host
@@ -85,7 +83,21 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 	echo "define( 'WP_REDIS_PORT', 6379 );" >> /var/www/html/wp-config.php
 	# Enable WordPress object caching
 	echo "define('WP_CACHE', true);" >> /var/www/html/wp-config.php
+
+	echo "define('WP_CACHE_KEY_SALT', "'$DOMAIN_NAME'");" >> /var/www/html/wp-config.php
+
+	echo "define( 'WP_REDIS_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
+
+	echo "define( 'WP_REDIS_READ_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
+
+	echo "define( 'WP_REDIS_CLIENT', 'phpredis' );" >> /var/www/html/wp-config.php
 	
+	# Install and activate the Redis Cache plugin for WordPress
+	wp plugin install redis-cache --activate --allow-root
+
+	# Update Wp Plugins
+	wp plugin update --all --allow-root
+	``
 	# Enable Redis caching in WordPress
 	wp redis enable --allow-root
 
