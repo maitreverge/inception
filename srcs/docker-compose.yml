@@ -82,7 +82,7 @@ services:
     # Define which part of the container is a bind mount (see note lower)
     volumes:
       - wordpress_volume:/var/www/html
-      # - static_website_volume:/var/www/static_website
+      - static_website_volume:/var/www/static_website
     # Critical service, should always be running
     restart: always
     # Include the container in the network.
@@ -93,7 +93,12 @@ services:
 ################################ BONUS SERVICES ################################
 ################################################################################
   redis:
-    hostname: redis
+    # hostname: redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 1s
+      retries: 10
     container_name: redis
     depends_on:
       mariadb:
@@ -103,74 +108,76 @@ services:
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
     env_file:
-      - .env
+    - .env
+    # expose:
+    # - 6379
     ports:
-      - 6379:6379
+    - 6379:6379
     volumes:
       - wordpress_volume:/var/www/html
     restart: always
     networks:
       - inception_network
 
-#   ftp:
-#     container_name: ftp
-#     build:
-#       context: ./requirements/bonus/2_ftp
-#       args:
-#         DEBIAN_VERSION: ${DEBIAN_VERSION}
-#         FTP_USER: ${FTP_USER}
-#         FTP_PASSWORD: ${FTP_PASSWORD}
-#     env_file:
-#       - .env
-#     ports:
-#       - 20:20 #FTP COMMAND PORT
-#       - 21:21 #FTP DATA PORT
-#     volumes:
-#       - wordpress_volume:/var/www/html
-#     restart: always
-#     networks:
-#       - inception_network
+  ftp:
+    container_name: ftp
+    build:
+      context: ./requirements/bonus/2_ftp
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+        FTP_USER: ${FTP_USER}
+        FTP_PASSWORD: ${FTP_PASSWORD}
+    env_file:
+      - .env
+    ports:
+      - 20:20 #FTP COMMAND PORT
+      - 21:21 #FTP DATA PORT
+    volumes:
+      - wordpress_volume:/var/www/html
+    restart: always
+    networks:
+      - inception_network
 
-#   static_website:
-#     container_name: static_website
-#     build:
-#       context: ./requirements/bonus/3_static_website
-#       args:
-#         DEBIAN_VERSION: ${DEBIAN_VERSION}
-#     env_file:
-#       - .env
-#     expose: #really usefull ?
-#       - 4242
-#     volumes:
-#       - static_website_volume:/var/www/static_website
-#     restart: always
-#     networks:
-#       - inception_network
+  static_website:
+    container_name: static_website
+    build:
+      context: ./requirements/bonus/3_static_website
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    env_file:
+      - .env
+    expose: #really usefull ?
+      - 4242
+    volumes:
+      - static_website_volume:/var/www/static_website
+    restart: always
+    networks:
+      - inception_network
 
-#   adminer:
-#     container_name: adminer
-#     depends_on:
-#       mariadb:
-#         condition: service_healthy
-#     build:
-#       context: ./requirements/bonus/4_adminer
-#       args:
-#         DEBIAN_VERSION: ${DEBIAN_VERSION}
-#     env_file:
-#       - .env
-#     ports:
-#       - 8080:8080
-#     volumes:
-#       - mariadb_volume:/var/lib/mysql # data location (see config file)
-#     restart: always
-#     networks:
-#       - inception_network
+  adminer:
+    container_name: adminer
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    build:
+      context: ./requirements/bonus/4_adminer
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION}
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    volumes:
+      - mariadb_volume:/var/lib/mysql # data location (see config file)
+    restart: always
+    networks:
+      - inception_network
 
   redis_commander:
     container_name: redis_commander
     depends_on:
       redis:
-        condition: service_started
+        condition: service_healthy
     build:
       context: ./requirements/bonus/5_redis_commander
       args:
@@ -180,7 +187,7 @@ services:
     ports:
       - 8081:8081
     environment:
-      - REDIS_HOSTS=local:redis:6379
+      - REDIS_HOSTS=test:redis:6379
     volumes:
       - wordpress_volume:/var/www/html
     restart: always

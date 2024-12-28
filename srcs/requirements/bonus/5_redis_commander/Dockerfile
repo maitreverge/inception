@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/23 16:58:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/28 11:33:24 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/28 19:33:01 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,14 @@ RUN		apt-get -y update && \
 		apt-get clean && \
 		rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g redis-commander
-        #   $ redis-commander
+# COPY conf/.redis-commander /root/
 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
+RUN npm install -g redis-commander
+
 ENTRYPOINT ["redis-commander"]
+# ENTRYPOINT ["redis-commander", "--config", "/root/.redis-commander"]
+
+# ENTRYPOINT ["redis-commander", "--nl", "--redis-hosts", "redis_wp:redis:6379:0"]
+
+		# ENTRYPOINT ["tail", "-f", "/dev/null"]
+# ENTRYPOINT ["redis-commander", "-1-host", "redis", "--port", "6579", "--is-cluster"]
