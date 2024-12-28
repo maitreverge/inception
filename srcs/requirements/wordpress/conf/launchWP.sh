@@ -78,19 +78,28 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 	
 	# Add Redis configuration to wp-config.php
 	# Define the Redis server host
-	echo "define( 'WP_REDIS_HOST', 'redis' );" >> /var/www/html/wp-config.php
-	# Define the Redis server port
-	echo "define( 'WP_REDIS_PORT', 6379 );" >> /var/www/html/wp-config.php
-	# Enable WordPress object caching
-	echo "define('WP_CACHE', true);" >> /var/www/html/wp-config.php
+	# echo "define( 'WP_REDIS_HOST', 'redis' );" >> /var/www/html/wp-config.php
+	# # Define the Redis server port
+	# echo "define( 'WP_REDIS_PORT', 6379 );" >> /var/www/html/wp-config.php
+	# # Enable WordPress object caching
+	# echo "define('WP_CACHE', true);" >> /var/www/html/wp-config.php
 
-	echo "define('WP_CACHE_KEY_SALT', "'$DOMAIN_NAME'");" >> /var/www/html/wp-config.php
+	# echo "define('WP_CACHE_KEY_SALT', "'$DOMAIN_NAME'");" >> /var/www/html/wp-config.php
 
-	echo "define( 'WP_REDIS_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
+	# echo "define( 'WP_REDIS_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
 
-	echo "define( 'WP_REDIS_READ_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
+	# echo "define( 'WP_REDIS_READ_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
 
-	echo "define( 'WP_REDIS_CLIENT', 'phpredis' );" >> /var/www/html/wp-config.php
+	# echo "define( 'WP_REDIS_CLIENT', 'phpredis' );" >> /var/www/html/wp-config.php
+
+	sed -i "/\/\* Add any custom values between this line and the \"stop editing\" line. \*\//a \\
+	define( 'WP_REDIS_HOST', 'redis' ); \\
+	define( 'WP_REDIS_PORT', 6379 ); \\
+	define('WP_CACHE', true); \\
+	define('WP_CACHE_KEY_SALT', "'$DOMAIN_NAME'"); \\
+	define( 'WP_REDIS_TIMEOUT', 5 ); \\
+	define( 'WP_REDIS_READ_TIMEOUT', 5 ); \\
+	define( 'WP_REDIS_CLIENT', 'phpredis' );" /var/www/html/wp-config.php
 	
 	# Install and activate the Redis Cache plugin for WordPress
 	wp plugin install redis-cache --activate --allow-root
