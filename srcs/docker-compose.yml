@@ -136,9 +136,9 @@ services:
     ports:
       - 20:20 #FTP DATA PORT
       - 21:21 #FTP DATA PORT
-      - "40000-40005:40000-40005"
+      - "21100-21110:21100-21110"
     volumes:
-      - wordpress_volume:/home/flverge/ftp/files
+      - wordpress_volume:/var/www/html
     restart: always
     networks:
       - inception_network
