@@ -15,6 +15,7 @@ services:
         # Build time arguments, which allows to leverage env variables because....
         DEBIAN_VERSION: ${DEBIAN_VERSION}
     # .... ENV Variables are not available during the building process, only when container starts
+    image: mariadb
     env_file:
       - .env
     # Expose = Expose a port within a Docker Networks. The port is then not available for the host.
@@ -49,6 +50,7 @@ services:
       context: ./requirements/wordpress
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+    image: wordpress
     env_file:
       - .env
     expose:
@@ -77,6 +79,7 @@ services:
         PATH_NGINX_CERTIFICATE: ${PATH_NGINX_CERTIFICATE}
         PATH_NGINX_TSL_KEY: ${PATH_NGINX_TSL_KEY}
     # Port : make a port available to the host.
+    image: nginx
     ports:
       - 443:443
       # - 4242:4242
@@ -85,8 +88,6 @@ services:
     volumes:
       - wordpress_volume:/var/www/html
       - static_website_volume:/var/www/static_website
-    # Critical service, should always be running
-    restart: always
     networks:
       - inception_network
 
@@ -108,6 +109,7 @@ services:
       context: ./requirements/bonus/1_redis
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+    image: redis
     env_file:
     - .env
     # expose:
@@ -128,6 +130,7 @@ services:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
         FTP_USER: ${FTP_USER}
         FTP_PASSWORD: ${FTP_PASSWORD}
+    image: ftp
     env_file:
       - .env
     ports:
@@ -145,10 +148,11 @@ services:
       context: ./requirements/bonus/3_static_website
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+    image: static_website
     env_file:
       - .env
-    expose: #really usefull ?
-      - 4242
+    # expose: #really usefull ?
+    #   - 4242
     volumes:
       - static_website_volume:/var/www/static_website
     restart: always
@@ -164,6 +168,7 @@ services:
       context: ./requirements/bonus/4_adminer
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+    image: adminer
     env_file:
       - .env
     ports:
@@ -183,6 +188,7 @@ services:
       context: ./requirements/bonus/5_redis_commander
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
+    image: redis_commander
     env_file:
       - .env
     ports:

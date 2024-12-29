@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/23 16:58:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/26 20:49:32 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/29 11:52:58 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,5 @@ RUN systemctl restart vsftpd
 # RUN launch_FTP.sh
 
 # RUN bash launch_FTP.sh
-
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 CMD ["/usr/sbin/vsftpd", "/etc/vsftpd.conf"]

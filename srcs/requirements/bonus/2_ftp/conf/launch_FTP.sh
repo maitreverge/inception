@@ -21,7 +21,3 @@ chown -R $FTP_USER:$FTP_USER /var/www/html
 # /usr/sbin/vsftpd
 
 systemctl restart vsftpd
-
-
-
-# tail -f /dev/null

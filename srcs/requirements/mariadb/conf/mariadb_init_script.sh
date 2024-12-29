@@ -40,6 +40,8 @@ rm init_db.sql
 
 # Kill current instance of mysqld_safe to avoid getting two instances of mysql running in the same container
 killall mysqld_safe
+
+#
 wait
 
 # Start MariaDB in the foreground to keep the container alive

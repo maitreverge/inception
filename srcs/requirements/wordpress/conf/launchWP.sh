@@ -26,6 +26,7 @@ if [ ! -f "/usr/local/bin/wp" ]; then
 
 	# Typing wp instead of php wp-cli.phar
 	chmod +x wp-cli.phar
+	# mv wp-cli.phar /usr/local/bin/wp
 	sudo mv wp-cli.phar /usr/local/bin/wp
     
 	echo -e "\033[0;32m***** WordPress CLI SUCCESSFULLY installed *****\033[0m"

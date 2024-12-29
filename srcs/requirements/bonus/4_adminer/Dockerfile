@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/23 16:58:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/27 21:35:23 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/29 11:53:13 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,5 +25,4 @@ RUN wget "http://www.adminer.org/latest.php" -O /var/www/html/adminer.php
 
 EXPOSE 8080
 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]
