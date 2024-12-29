@@ -6,37 +6,19 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/23 16:58:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/29 11:52:58 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/29 16:30:05 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ARG DEBIAN_VERSION
 FROM debian:${DEBIAN_VERSION:-bullseye}
 
-RUN	apt-get -y update && \
-	apt install -y vsftpd systemctl 
+RUN apt-get update && apt-get install -y vsftpd
 
-COPY conf/launch_FTP.sh /
+COPY conf/vsftpd.conf /tmp/vsftpd.conf
 
-# RUN chmod +x launch_FTP.sh
+COPY conf/launchFTP.sh /
 
-COPY conf/vsftpd.conf /etc/vsftpd.conf
+RUN chmod +x launchFTP.sh
 
-# Create the userlist
-RUN touch /etc/vsftpd.userlist
-
-ARG FTP_USER
-ARG FTP_PASSWORD
-
-RUN	useradd -m -s /bin/bash ${FTP_USER}
-RUN echo "${FTP_USER}:${FTP_PASSWORD}" | chpasswd
-RUN echo "${FTP_USER}" >> /etc/vsftpd.userlist
-RUN mkdir -p /var/www/html
-RUN chown -R ${FTP_USER}:${FTP_USER} /var/www/html
-RUN systemctl restart vsftpd
-
-# RUN launch_FTP.sh
-
-# RUN bash launch_FTP.sh
-
-CMD ["/usr/sbin/vsftpd", "/etc/vsftpd.conf"]
+ENTRYPOINT ["bash", "launchFTP.sh"]

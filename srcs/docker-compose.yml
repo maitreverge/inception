@@ -128,16 +128,17 @@ services:
       context: ./requirements/bonus/2_ftp
       args:
         DEBIAN_VERSION: ${DEBIAN_VERSION}
-        FTP_USER: ${FTP_USER}
-        FTP_PASSWORD: ${FTP_PASSWORD}
+        # FTP_USER: ${FTP_USER}
+        # FTP_PASSWORD: ${FTP_PASSWORD}
     image: ftp
     env_file:
       - .env
     ports:
-      - 20:20 #FTP COMMAND PORT
+      - 20:20 #FTP DATA PORT
       - 21:21 #FTP DATA PORT
+      - "40000-40005:40000-40005"
     volumes:
-      - wordpress_volume:/var/www/html
+      - wordpress_volume:/home/flverge/ftp/files
     restart: always
     networks:
       - inception_network
