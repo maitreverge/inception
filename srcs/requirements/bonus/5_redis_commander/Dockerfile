@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/23 16:58:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/29 11:53:18 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/30 08:46:18 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,6 @@ RUN		apt-get -y update && \
     	apt-get -y install npm && \
 		apt-get clean && \
 		rm -rf /var/lib/apt/lists/*
-
-# COPY conf/.redis-commander /root/
 
 RUN npm install -g redis-commander
 

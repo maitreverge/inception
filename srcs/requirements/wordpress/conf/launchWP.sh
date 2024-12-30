@@ -1,11 +1,5 @@
 #!/bin/sh
 
-# As long as the MySQL command to connect to the MariaDB server returns an error (i.e., the server is not ready or the connection fails), keep executing the loop.
-# until mysql -u root -p"${MARIADB_ROOT_PASSWORD}" -h mariadb -P 3306 --silent; do
-#     echo "Wordpress container waiting for MariaDB connection$..."
-# done
-# No need to disconnect from mysql afterwards, commands  within a `until` stays within this scope.
-
 echo "MariaDB is up and running."
 
 # Allows the script to exit if any of the commands fails
@@ -72,27 +66,9 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 
 	wp user create $WP_USER_LOGIN $WP_USER_EMAIL --role=author --user_pass=$WP_USER_PASSWORD --allow-root
 
-	# wp theme install codeify --activate --allow-root
-
 	################ REDIS BONUS ####################
 	
-	
 	# Add Redis configuration to wp-config.php
-	# Define the Redis server host
-	# echo "define( 'WP_REDIS_HOST', 'redis' );" >> /var/www/html/wp-config.php
-	# # Define the Redis server port
-	# echo "define( 'WP_REDIS_PORT', 6379 );" >> /var/www/html/wp-config.php
-	# # Enable WordPress object caching
-	# echo "define('WP_CACHE', true);" >> /var/www/html/wp-config.php
-
-	# echo "define('WP_CACHE_KEY_SALT', "'$DOMAIN_NAME'");" >> /var/www/html/wp-config.php
-
-	# echo "define( 'WP_REDIS_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
-
-	# echo "define( 'WP_REDIS_READ_TIMEOUT', 5 );" >> /var/www/html/wp-config.php
-
-	# echo "define( 'WP_REDIS_CLIENT', 'phpredis' );" >> /var/www/html/wp-config.php
-
 	sed -i "/\/\* Add any custom values between this line and the \"stop editing\" line. \*\//a \\
 	define( 'WP_REDIS_HOST', 'redis' ); \\
 	define( 'WP_REDIS_PORT', 6379 ); \\
@@ -124,8 +100,4 @@ else
     echo -e "\033[0;33m***** /run/php directory already exists *****\033[0m"
 fi
 
-# REDIS BONUS
-
 exec /usr/sbin/php-fpm7.4 -F
-
-

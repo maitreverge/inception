@@ -6,7 +6,7 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 18:37:21 by flverge           #+#    #+#              #
-#    Updated: 2024/12/29 11:53:23 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/30 08:45:38 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,4 @@ COPY conf/launchWP.sh /
 
 RUN chmod +x launchWP.sh
 
-# RUN bash launchWP.sh
-
 ENTRYPOINT ["bash", "launchWP.sh"]
-# ENTRYPOINT ["bash", "/usr/sbin/php-fpm7.4", "-F"]
