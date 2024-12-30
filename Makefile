@@ -6,11 +6,18 @@
 #    By: flverge <flverge@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/13 18:18:52 by flverge           #+#    #+#              #
-#    Updated: 2024/12/27 08:29:14 by flverge          ###   ########.fr        #
+#    Updated: 2024/12/30 07:28:24 by flverge          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-all: create_volume
+check_env:
+	@if [ ! -f srcs/.env ]; then \
+		echo "Error : .env file not found, aborting Docker Build"; \
+		exit 1; \
+	fi
+
+all: check_env create_volume
+		
 	@sudo apt-get -y install hostsed > /dev/null
 	@sudo hostsed add 127.0.0.1 flverge.42.fr > /dev/null
 	@echo "\n\033[1;32m***| ADD flverge.42.fr to /etc/hosts |***\033[0m\n"
@@ -32,7 +39,7 @@ down:
 	@docker compose -f srcs/docker-compose.yml down
 	@echo "\n\033[1;32m***| CONTAINERS DOWN |***\033[0m\n"
 
-du: down up
+du: check_env down up
 
 stop:
 	@echo "\n\033[1;33m***| STOPPING CONTAINERS |***\033[0m\n"
@@ -44,11 +51,11 @@ start:
 	@docker compose -f srcs/docker-compose.yml start
 	@echo "\n\033[1;32m***| CONTAINERS STARTED |***\033[0m\n"
 
-restart: stop start
+restart: check_env stop start
 
-re: clean all
+re: check_env clean all
 
-prod: down delete_volume up
+prod: check_env down delete_volume up
 
 # TOUT FAIRE PETER
 clean: down delete_volume
@@ -70,4 +77,4 @@ delete_volume:
 	@sudo rm -rf /home/${USER}/data/static_website_volume
 	@echo "\n\033[1;32m***| Volumes Deteted |***\033[0m\n"
 
-.PHONY : all up down du re prod clean stop start restart create_volume delete_volume
+.PHONY : all up down du re prod clean stop start restart create_volume delete_volume check_env
