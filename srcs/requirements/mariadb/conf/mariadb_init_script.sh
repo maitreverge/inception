@@ -10,39 +10,47 @@ if [ -z "$MARIADB_DATABASE_NAME" ] || [ -z "$MARIADB_ROOT_PASSWORD" ] || [ -z "$
     exit 1
 fi
 
-# Launching mysql as a background task
-mysqld_safe &
+# If the database does not exists, initialize the database
+if [ ! -f "/var/lib/mysql/wp_inception_database" ]; then
 
-echo "Starting MariaDB daemon process: $MARIADB_DATABASE_NAME ..."
-sleep 5
+	# Launching mysql as a background task
+	mysqld_safe &
 
-echo "CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';" > init_db.sql # DONE
-echo "ALTER USER 'root'@'%' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';" >> init_db.sql # DONE
-echo "CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE_NAME}\`;" >> init_db.sql # DONE
-echo "CREATE USER IF NOT EXISTS '${MARIADB_USER_LOGIN}'@'%' IDENTIFIED BY '${MARIADB_USER_PASSWORD}';" >> init_db.sql # DONE
-echo "GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE_NAME}\`.* TO \`${MARIADB_USER_LOGIN}\`@'%';" >> init_db.sql # DONE
-echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;" >> init_db.sql # DONE
-echo "FLUSH PRIVILEGES;" >> init_db.sql
+	echo "Starting MariaDB daemon process: $MARIADB_DATABASE_NAME ..."
+	sleep 5
 
-echo "Initializing database..."
+	echo "CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';" > init_db.sql # DONE
+	echo "ALTER USER 'root'@'%' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';" >> init_db.sql # DONE
+	echo "CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE_NAME}\`;" >> init_db.sql # DONE
+	echo "CREATE USER IF NOT EXISTS '${MARIADB_USER_LOGIN}'@'%' IDENTIFIED BY '${MARIADB_USER_PASSWORD}';" >> init_db.sql # DONE
+	echo "GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE_NAME}\`.* TO \`${MARIADB_USER_LOGIN}\`@'%';" >> init_db.sql # DONE
+	echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;" >> init_db.sql # DONE
+	echo "FLUSH PRIVILEGES;" >> init_db.sql
 
-mariadb < init_db.sql
+	echo "Initializing database..."
 
-# Checks if the database init went well
-if [ $? -eq 0 ]; then
-    echo "Database ${MARIADB_DATABASE_NAME} created successfully."
+	mariadb < init_db.sql
+
+	# Checks if the database init went well
+	if [ $? -eq 0 ]; then
+		echo "Database ${MARIADB_DATABASE_NAME} created successfully."
+	else
+		echo "Failed to create database."
+		exit 1
+	fi
+
+	rm init_db.sql
+
+	# Kill current instance of mysqld_safe to avoid getting two instances of mysql running in the same container
+	killall mysqld_safe
+
+	#
+	wait
+
+	echo -e "\033[0;32m***** MariaDB Database SUCCESSFULLY created *****\033[0m"
 else
-    echo "Failed to create database."
-	exit 1
+	echo -e "\033[0;33m***** MariaDB Database ALREADY created *****\033[0m"
 fi
-
-rm init_db.sql
-
-# Kill current instance of mysqld_safe to avoid getting two instances of mysql running in the same container
-killall mysqld_safe
-
-#
-wait
 
 # Start MariaDB in the foreground to keep the container alive
 # The exec command replaces the shell process (or the current script) with the mysqld process
