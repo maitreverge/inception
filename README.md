@@ -20,4 +20,4 @@ Unfinished project, soon.
 Unfinished project, soon.
 
 ## 🤝 CONTRIBUTION
-Contributions are open !
+Contributions are open, open a Github Issue or submit a PR 🚀
