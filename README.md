@@ -169,5 +169,3 @@ Access your WordPress site at https://yourdomain.com
 
 ## 🤝 CONTRIBUTION
 Contributions are open, open a Github Issue or submit a PR 🚀
-
-<div align="center"> <p>Made with ❤️ by maitreverge</p> </div>
